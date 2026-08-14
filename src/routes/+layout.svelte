@@ -1,10 +1,11 @@
 <script lang="ts">
 	import './layout.css';
 	import Logo from '$lib/assets/favicon.svg';
-	import { resolve } from '$app/paths';
+	import { cn } from '$lib/utils/ui';
 
 	let { children } = $props();
 	let isMenuOpen = $state(false);
+	// ANTIQUE: class="bg-slate-900 text-sm font-semibold text-white uppercase lg:rounded-full lg:px-4 lg:py-2"
 </script>
 
 <div class="min-h-screen bg-slate-50">
@@ -14,7 +15,7 @@
 		>
 			<div class="flex items-center justify-between gap-3 lg:flex-1">
 				<div class="flex items-center gap-3">
-					<img src={Logo} alt="SABRE Logo" class="h-12 w-auto sm:h-14" />
+					<img src={Logo} alt="Bolso Logo" class="h-12 w-auto sm:h-14" />
 					<div class="space-y-1">
 						<h1 class="text-lg font-semibold text-slate-900">RPG de Bolso</h1>
 					</div>
@@ -41,12 +42,13 @@
 				</button>
 			</div>
 			<div
-				class={`flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between lg:justify-end ${
+				class={cn(
+					'flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between lg:justify-end',
 					isMenuOpen ? 'flex' : 'hidden lg:flex'
-				}`}
+				)}
 			>
 				<nav class="flex flex-wrap items-center gap-2">
-					<a class="">Entrar</a>
+					<a class="w-full bg-slate-900 text-center">Entrar</a>
 				</nav>
 			</div>
 		</div>
