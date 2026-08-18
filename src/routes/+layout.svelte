@@ -1,6 +1,6 @@
 <script lang="ts">
 	import './layout.css';
-	import Logo from '$lib/assets/favicon.svg';
+	import Logo from '$lib/assets/logo.svg';
 	import { cn } from '$lib/utils/ui';
 
 	let { children } = $props();
@@ -8,8 +8,8 @@
 	// ANTIQUE: class="bg-slate-900 text-sm font-semibold text-white uppercase lg:rounded-full lg:px-4 lg:py-2"
 </script>
 
-<div class="min-h-screen bg-slate-50">
-	<header class="border-b border-slate-200 bg-white">
+<div class="min-h-screen bg-slate-950 text-slate-50">
+	<header class="border-b border-slate-800 bg-slate-900">
 		<div
 			class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between"
 		>
@@ -17,39 +17,39 @@
 				<div class="flex items-center gap-3">
 					<img src={Logo} alt="Bolso Logo" class="h-12 w-auto sm:h-14" />
 					<div class="space-y-1">
-						<h1 class="text-lg font-semibold text-slate-900">RPG de Bolso</h1>
+						<h1 class="text-lg font-semibold text-slate-50">RPG de Bolso</h1>
 					</div>
 				</div>
-				<button
-					type="button"
-					class="inline-flex items-center justify-center rounded-md border border-slate-300 p-2 text-slate-700 lg:hidden"
-					aria-expanded={isMenuOpen}
-					aria-label="Abrir menu"
-					onclick={() => (isMenuOpen = !isMenuOpen)}
-				>
-					<svg
-						viewBox="0 0 24 24"
-						class="h-5 w-5"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
+				<div class="TODO:remove-me hidden">
+					<button
+						type="button"
+						class="inline-flex items-center justify-center rounded-md border border-slate-700 p-2 text-slate-400 lg:hidden"
+						aria-expanded={isMenuOpen}
+						aria-label="Abrir menu"
+						onclick={() => (isMenuOpen = !isMenuOpen)}
 					>
-						<path d="M4 6h16" />
-						<path d="M4 12h16" />
-						<path d="M4 18h16" />
-					</svg>
-				</button>
-			</div>
-			<div
-				class={cn(
-					'flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between lg:justify-end',
-					isMenuOpen ? 'flex' : 'hidden lg:flex'
-				)}
-			>
-				<nav class="flex flex-wrap items-center gap-2">
-					<a class="w-full bg-slate-900 text-center">Entrar</a>
-				</nav>
+						<svg
+							viewBox="0 0 24 24"
+							class="h-5 w-5"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+						>
+							<path d="M4 6h16" />
+							<path d="M4 12h16" />
+							<path d="M4 18h16" />
+						</svg>
+					</button>
+				</div>
+				<div
+					class={cn(
+						'flex flex-col gap-3 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between lg:justify-end',
+						isMenuOpen ? 'flex' : 'hidden lg:flex'
+					)}
+				>
+					<nav class="flex flex-wrap items-center gap-2"></nav>
+				</div>
 			</div>
 		</div>
 	</header>
