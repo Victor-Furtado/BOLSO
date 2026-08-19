@@ -5,10 +5,9 @@
 
 	let { children } = $props();
 	let isMenuOpen = $state(false);
-	// ANTIQUE: class="bg-slate-900 text-sm font-semibold text-white uppercase lg:rounded-full lg:px-4 lg:py-2"
 </script>
 
-<div class="min-h-screen bg-slate-950 text-slate-50">
+<div class="flex min-h-screen flex-col bg-slate-950 text-slate-50">
 	<header class="border-b border-slate-800 bg-slate-900">
 		<div
 			class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between"
@@ -54,7 +53,7 @@
 		</div>
 	</header>
 
-	<main class="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
+	<main class="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
 		{@render children()}
 	</main>
 </div>
