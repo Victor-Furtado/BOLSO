@@ -7,8 +7,8 @@
 	let isMenuOpen = $state(false);
 </script>
 
-<div class="flex min-h-screen flex-col bg-slate-950 text-slate-50">
-	<header class="border-b border-slate-800 bg-slate-900">
+<div class="flex min-h-screen flex-col bg-background text-foreground">
+	<header class="border-b border-border bg-surface">
 		<div
 			class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between"
 		>
@@ -16,13 +16,13 @@
 				<div class="flex items-center gap-3">
 					<img src={Logo} alt="Bolso Logo" class="h-12 w-auto sm:h-14" />
 					<div class="space-y-1">
-						<h1 class="text-lg font-semibold text-slate-50">RPG de Bolso</h1>
+						<h1 class="text-lg font-semibold text-foreground">RPG de Bolso</h1>
 					</div>
 				</div>
 				<div class="TODO:remove-me hidden">
 					<button
 						type="button"
-						class="inline-flex items-center justify-center rounded-md border border-slate-700 p-2 text-slate-400 lg:hidden"
+						class="inline-flex items-center justify-center rounded-md border border-border p-2 text-muted-foreground lg:hidden"
 						aria-expanded={isMenuOpen}
 						aria-label="Abrir menu"
 						onclick={() => (isMenuOpen = !isMenuOpen)}

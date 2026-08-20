@@ -25,13 +25,13 @@
 	}
 </script>
 
-<div class="rounded-lg border border-slate-800 bg-slate-900 p-6">
-	<h2 class="mb-6 text-xl font-semibold text-slate-50">Informações Básicas</h2>
+<div class="rounded-lg border border-border bg-surface p-6">
+	<h2 class="mb-6 text-xl font-semibold text-foreground">Informações Básicas</h2>
 
 	<div class="grid gap-4 sm:grid-cols-2">
 		<div class="flex flex-col gap-3">
 			<div>
-				<label for="nome" class="mb-2 block text-sm font-medium text-slate-300"
+				<label for="nome" class="mb-2 block text-sm font-medium text-foreground"
 					>Nome do Personagem</label
 				>
 				<input
@@ -39,12 +39,12 @@
 					type="text"
 					bind:value={character.nome}
 					placeholder="Ex: Aragorn, Elara Moonwhisper"
-					class="w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-slate-50 placeholder-slate-500 transition-colors focus:border-slate-600 focus:ring-1 focus:ring-slate-600 focus:outline-none"
+					class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground placeholder-subtle-foreground transition-colors focus:border-primary-500 focus:ring-1 focus:ring-ring focus:outline-none"
 				/>
 			</div>
 
 			<div>
-				<label for="alcunha" class="mb-2 block text-sm font-medium text-slate-300"
+				<label for="alcunha" class="mb-2 block text-sm font-medium text-foreground"
 					>Alcunha / Vulgo</label
 				>
 				<input
@@ -52,45 +52,47 @@
 					type="text"
 					bind:value={character.alcunha}
 					placeholder="Ex: O Ranger, A Maga da Névoa"
-					class="w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-slate-50 placeholder-slate-500 transition-colors focus:border-slate-600 focus:ring-1 focus:ring-slate-600 focus:outline-none"
+					class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground placeholder-subtle-foreground transition-colors focus:border-primary-500 focus:ring-1 focus:ring-ring focus:outline-none"
 				/>
 			</div>
 
 			<div class="sm:col-span-2">
-				<label for="origem" class="mb-2 block text-sm font-medium text-slate-300">Origem</label>
+				<label for="origem" class="mb-2 block text-sm font-medium text-foreground">Origem</label>
 				<input
 					id="origem"
 					type="text"
 					bind:value={character.origem}
 					placeholder="Ex: Reino de Gondor, Floresta de Mirkwood, Forja dos Anões"
-					class="w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-slate-50 placeholder-slate-500 transition-colors focus:border-slate-600 focus:ring-1 focus:ring-slate-600 focus:outline-none"
+					class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground placeholder-subtle-foreground transition-colors focus:border-primary-500 focus:ring-1 focus:ring-ring focus:outline-none"
 				/>
 			</div>
 
 			<hr />
 
 			<div>
-				<label for="citacao" class="mb-2 block text-sm font-medium text-slate-300"
+				<label for="citacao" class="mb-2 block text-sm font-medium text-foreground"
 					>Citação ou Frase de Efeito</label
 				>
-				<span class="mb-2 block text-xs text-slate-400">Uma linha que resume o personagem</span>
+				<span class="mb-2 block text-xs text-muted-foreground"
+					>Uma linha que resume o personagem</span
+				>
 				<input
 					id="citacao"
 					type="text"
 					bind:value={character.citacao}
 					placeholder="Ex: 'A coragem não é a ausência do medo, é agir apesar dele'"
-					class="w-full rounded-md border border-slate-700 bg-slate-800 px-3 py-2 text-slate-50 placeholder-slate-500 transition-colors focus:border-slate-600 focus:ring-1 focus:ring-slate-600 focus:outline-none"
+					class="w-full rounded-md border border-border bg-input px-3 py-2 text-foreground placeholder-subtle-foreground transition-colors focus:border-primary-500 focus:ring-1 focus:ring-ring focus:outline-none"
 				/>
 			</div>
 		</div>
 
 		<div>
-			<h2 class="text-xl font-semibold text-slate-50">Avatar</h2>
+			<h2 class="text-xl font-semibold text-foreground">Avatar</h2>
 			<label
-				class="hover:bg-slate-750 flex cursor-pointer items-center justify-center gap-2 rounded-md border-2 border-dashed border-slate-700 bg-slate-800 p-6 transition-colors hover:border-slate-600"
+				class="flex cursor-pointer items-center justify-center gap-2 rounded-md border-2 border-dashed border-border bg-input p-6 transition-colors hover:border-primary-500 hover:bg-surface-hover"
 			>
-				<Upload size={20} class="text-slate-400" />
-				<span class="text-sm text-slate-400">Clique para selecionar</span>
+				<Upload size={20} class="text-muted-foreground" />
+				<span class="text-sm text-muted-foreground">Clique para selecionar</span>
 				<input
 					id="avatar"
 					type="file"
@@ -101,9 +103,9 @@
 			</label>
 			{#if character.avatarPreview}
 				<div>
-					<p class="mb-3 block text-sm font-medium text-slate-300">Prévia</p>
+					<p class="mb-3 block text-sm font-medium text-foreground">Prévia</p>
 					<div
-						class="flex items-center justify-center rounded-md border border-slate-700 bg-slate-800 p-4"
+						class="flex items-center justify-center rounded-md border border-border bg-input p-4"
 					>
 						<img
 							src={character.avatarPreview}
