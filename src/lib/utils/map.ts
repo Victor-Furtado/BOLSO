@@ -11,6 +11,7 @@ export const ancestryVisionMap = {
 	'low-light-vision': 'Visão na penumbra'
 } as const;
 
-export function getMappedValue<T extends string>(map: Record<string, string>, value: T) {
+export function getMappedValue<T extends string>(map: Record<string, string>, value?: T) {
+	if (!value) return undefined;
 	return map[value] ?? value;
 }

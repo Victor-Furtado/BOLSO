@@ -2,15 +2,20 @@
 	import { Check, Heart, Languages, Move, Sparkles, Swords } from 'lucide-svelte';
 	import ancestries from '$lib/data/ancestries.json';
 	import { ancestrySizeMap, ancestryVisionMap, getMappedValue } from '$lib/utils/map';
+	import { cn } from '$lib/utils/ui';
 
 	type Ancestry = (typeof ancestries)[number];
 
-	let selectedAncestry = $state<Ancestry>(ancestries[0]);
+	let selectedAncestry = $state<Ancestry | null>(null);
 </script>
 
 <div class="flex min-h-0 flex-col gap-6">
 	<section
-		class="flex min-h-0 shrink-0 flex-col overflow-hidden rounded-lg border border-border bg-surface"
+		class={cn([
+			'grid overflow-hidden rounded-lg border border-border bg-surface',
+			'transition-[grid-template-rows,opacity] duration-300 ease-in-out',
+			selectedAncestry ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] border-0 opacity-0'
+		])}
 	>
 		<div class="min-h-0 flex-1 overflow-y-auto">
 			<div class="grid gap-0 lg:grid-cols-[minmax(0,1fr)_18rem]">
@@ -20,7 +25,7 @@
 							<p class="mb-2 text-xs font-semibold text-primary-400 uppercase">
 								Ancestralidade selecionada
 							</p>
-							<h2 class="text-2xl font-semibold text-foreground">{selectedAncestry.name}</h2>
+							<h2 class="text-2xl font-semibold text-foreground">{selectedAncestry?.name}</h2>
 						</div>
 						<div
 							class="rounded-full border border-primary-500/30 bg-primary-950 p-3 text-primary-300"
@@ -30,7 +35,7 @@
 					</div>
 
 					<p class="max-w-3xl text-sm leading-6 text-muted-foreground">
-						{selectedAncestry.description}
+						{selectedAncestry?.description}
 					</p>
 
 					<div class="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -39,14 +44,14 @@
 								<Heart size={16} />
 								<span class="text-xs font-medium uppercase">Vitalidade</span>
 							</div>
-							<p class="text-lg font-semibold text-foreground">{selectedAncestry.hp} PV</p>
+							<p class="text-lg font-semibold text-foreground">{selectedAncestry?.hp} PV</p>
 						</div>
 						<div class="rounded-md border border-border bg-surface-raised p-4">
 							<div class="mb-2 flex items-center gap-2 text-primary-300">
 								<Move size={16} />
 								<span class="text-xs font-medium uppercase">Movimento</span>
 							</div>
-							<p class="text-lg font-semibold text-foreground">{selectedAncestry.speed} pés</p>
+							<p class="text-lg font-semibold text-foreground">{selectedAncestry?.speed} pés</p>
 						</div>
 						<div class="rounded-md border border-border bg-surface-raised p-4">
 							<div class="mb-2 flex items-center gap-2 text-primary-300">
@@ -54,7 +59,7 @@
 								<span class="text-xs font-medium uppercase">Tamanho</span>
 							</div>
 							<p class="text-lg font-semibold text-foreground">
-								{getMappedValue(ancestrySizeMap, selectedAncestry.size)}
+								{getMappedValue(ancestrySizeMap, selectedAncestry?.size)}
 							</p>
 						</div>
 						<div class="rounded-md border border-border bg-surface-raised p-4">
@@ -63,7 +68,7 @@
 								<span class="text-xs font-medium uppercase">Visão</span>
 							</div>
 							<p class="text-lg font-semibold text-foreground">
-								{getMappedValue(ancestryVisionMap, selectedAncestry.vision)}
+								{getMappedValue(ancestryVisionMap, selectedAncestry?.vision)}
 							</p>
 						</div>
 					</div>
@@ -73,15 +78,15 @@
 					class="relative min-h-56 overflow-hidden border-t border-border bg-surface-raised lg:border-t-0 lg:border-l"
 				>
 					<img
-						src={selectedAncestry.img}
-						alt={selectedAncestry.name}
+						src={selectedAncestry?.img}
+						alt={selectedAncestry?.name}
 						class="h-full min-h-56 w-full object-cover"
 					/>
 					<div
 						class="absolute inset-x-0 bottom-0 bg-linear-to-t from-surface-raised to-transparent p-5 pt-14"
 					>
 						<div class="flex flex-wrap gap-2">
-							{#each selectedAncestry.traits as trait (trait)}
+							{#each selectedAncestry?.traits as trait (trait)}
 								<span
 									class="rounded-full border border-border bg-background/80 px-2.5 py-1 text-xs text-muted-foreground"
 								>
@@ -97,12 +102,12 @@
 				<div>
 					<h3 class="mb-3 text-sm font-semibold text-foreground">Aumentos e fraquezas</h3>
 					<div class="flex flex-wrap gap-2">
-						{#each selectedAncestry.boosts as boost (boost)}
+						{#each selectedAncestry?.boosts as boost (boost)}
 							<span class="rounded-md bg-success/15 px-2.5 py-1 text-xs font-medium text-success"
 								>+{boost}</span
 							>
 						{/each}
-						{#each selectedAncestry.flaws as flaw (flaw)}
+						{#each selectedAncestry?.flaws as flaw (flaw)}
 							<span class="rounded-md bg-danger/15 px-2.5 py-1 text-xs font-medium text-danger"
 								>-{flaw}</span
 							>
@@ -114,7 +119,7 @@
 						<Languages size={16} class="text-primary-300" />
 						<h3 class="text-sm font-semibold text-foreground">Idiomas</h3>
 					</div>
-					<p class="text-sm text-muted-foreground">{selectedAncestry.languages.join(', ')}</p>
+					<p class="text-sm text-muted-foreground">{selectedAncestry?.languages.join(', ')}</p>
 				</div>
 			</div>
 		</div>
@@ -135,7 +140,7 @@
 			{#each ancestries as ancestry (ancestry.id)}
 				<button
 					type="button"
-					class="group overflow-hidden rounded-md border bg-surface text-left transition-colors hover:border-primary-500 hover:bg-surface-raised {selectedAncestry.id ===
+					class="group overflow-hidden rounded-md border bg-surface text-left transition-colors hover:border-primary-500 hover:bg-surface-raised {selectedAncestry?.id ===
 					ancestry.id
 						? 'border-primary-500 ring-1 ring-primary-500'
 						: 'border-border'}"
@@ -149,7 +154,7 @@
 					<div class="p-3">
 						<div class="flex items-center justify-between gap-2">
 							<h3 class="truncate text-sm font-semibold text-foreground">{ancestry.name}</h3>
-							{#if selectedAncestry.id === ancestry.id}
+							{#if selectedAncestry?.id === ancestry.id}
 								<Check size={15} class="shrink-0 text-primary-400" />
 							{/if}
 						</div>
