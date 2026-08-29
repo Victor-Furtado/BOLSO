@@ -1,12 +1,59 @@
 <script lang="ts">
 	import { Check, Heart, Languages, Move, Sparkles, Swords } from 'lucide-svelte';
 	import ancestries from '$lib/data/ancestries.json';
+	import ancestryItems from '$lib/data/items/ancestries.json';
 	import { ancestrySizeMap, ancestryVisionMap, getMappedValue } from '$lib/utils/map';
 	import { cn } from '$lib/utils/ui';
 
 	type Ancestry = (typeof ancestries)[number];
 
 	let selectedAncestry = $state<Ancestry | null>(null);
+
+	const visionShortMap = {
+		normal: 'Normal',
+		darkvision: 'Escuro',
+		'low-light-vision': 'Penumbra'
+	} as const;
+
+	const selectedStats = $derived([
+		{
+			label: 'Vitalidade',
+			value: selectedAncestry ? `${selectedAncestry.hp} PV` : '',
+			Icon: Heart
+		},
+		{
+			label: 'Movimento',
+			value: selectedAncestry ? `${selectedAncestry.speed} pés` : '',
+			Icon: Move
+		},
+		{
+			label: 'Tamanho',
+			value: getMappedValue(ancestrySizeMap, selectedAncestry?.size) ?? '',
+			Icon: Swords
+		},
+		{
+			label: 'Visão',
+			value: getMappedValue(visionShortMap, selectedAncestry?.vision) ?? '',
+			detail: getMappedValue(ancestryVisionMap, selectedAncestry?.vision) ?? '',
+			Icon: Sparkles
+		}
+	]);
+
+	const ancestryItemById = new Map(ancestryItems.map((item) => [item.id, item]));
+
+	const selectedFeatures = $derived(
+		(selectedAncestry?.items ?? [])
+			.map((id) => ancestryItemById.get(id))
+			.filter((item): item is (typeof ancestryItems)[number] => item != null)
+	);
+
+	function formatFeatureDescription(html: string) {
+		return html
+			.replace(/@UUID\[[^\]]*Item\.([^\]]+)\]/g, '$1')
+			.replace(/<[^>]+>/g, ' ')
+			.replace(/\s+/g, ' ')
+			.trim();
+	}
 </script>
 
 <div class="flex min-h-0 flex-col gap-6">
@@ -18,77 +65,73 @@
 		])}
 	>
 		<div class="min-h-0 flex-1 overflow-y-auto">
-			<div class="grid gap-0 lg:grid-cols-[minmax(0,1fr)_18rem]">
-				<div class="p-6 sm:p-8">
-					<div class="mb-6 flex items-start justify-between gap-4">
+			<div class="grid gap-0 lg:grid-cols-[minmax(0,1fr)_14rem]">
+				<div class="p-4 sm:p-5">
+					<div class="mb-3 flex items-start justify-between gap-3">
 						<div>
-							<p class="mb-2 text-xs font-semibold text-primary-400 uppercase">
+							<p class="mb-1 text-[11px] font-semibold text-primary-400 uppercase">
 								Ancestralidade selecionada
 							</p>
-							<h2 class="text-2xl font-semibold text-foreground">{selectedAncestry?.name}</h2>
+							<h2 class="text-xl font-semibold text-foreground">{selectedAncestry?.name}</h2>
 						</div>
 						<div
-							class="rounded-full border border-primary-500/30 bg-primary-950 p-3 text-primary-300"
+							class="rounded-full border border-primary-500/30 bg-primary-950 p-2 text-primary-300"
 						>
-							<Check size={20} />
+							<Check size={16} />
 						</div>
 					</div>
 
-					<p class="max-w-3xl text-sm leading-6 text-muted-foreground">
-						{selectedAncestry?.description}
-					</p>
+					{#key selectedAncestry?.id}
+						<div
+							class="h-16 max-h-16 min-h-16 max-w-3xl shrink-0 overflow-y-auto overscroll-contain pr-2 text-sm leading-5 text-muted-foreground"
+						>
+							<p>{selectedAncestry?.description}</p>
+						</div>
+					{/key}
 
-					<div class="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-						<div class="rounded-md border border-border bg-surface-raised p-4">
-							<div class="mb-2 flex items-center gap-2 text-primary-300">
-								<Heart size={16} />
-								<span class="text-xs font-medium uppercase">Vitalidade</span>
+					<div
+						class="mt-4 flex divide-x divide-border overflow-x-auto rounded-md border border-border bg-surface-raised"
+					>
+						{#each selectedStats as stat (stat.label)}
+							<div
+								class="flex min-w-0 flex-1 items-center gap-2 px-2.5 py-2"
+								title="{stat.label}: {stat.detail ?? stat.value}"
+							>
+								<span
+									class="flex size-7 shrink-0 items-center justify-center rounded-full border border-primary-500/25 bg-primary-950 text-primary-300"
+								>
+									<stat.Icon size={13} />
+								</span>
+								<div class="min-w-0">
+									<p
+										class="truncate text-[10px] font-medium tracking-wide text-subtle-foreground uppercase"
+									>
+										{stat.label}
+									</p>
+									<p class="truncate text-sm font-semibold text-foreground">{stat.value}</p>
+								</div>
 							</div>
-							<p class="text-lg font-semibold text-foreground">{selectedAncestry?.hp} PV</p>
-						</div>
-						<div class="rounded-md border border-border bg-surface-raised p-4">
-							<div class="mb-2 flex items-center gap-2 text-primary-300">
-								<Move size={16} />
-								<span class="text-xs font-medium uppercase">Movimento</span>
-							</div>
-							<p class="text-lg font-semibold text-foreground">{selectedAncestry?.speed} pés</p>
-						</div>
-						<div class="rounded-md border border-border bg-surface-raised p-4">
-							<div class="mb-2 flex items-center gap-2 text-primary-300">
-								<Swords size={16} />
-								<span class="text-xs font-medium uppercase">Tamanho</span>
-							</div>
-							<p class="text-lg font-semibold text-foreground">
-								{getMappedValue(ancestrySizeMap, selectedAncestry?.size)}
-							</p>
-						</div>
-						<div class="rounded-md border border-border bg-surface-raised p-4">
-							<div class="mb-2 flex items-center gap-2 text-primary-300">
-								<Sparkles size={16} />
-								<span class="text-xs font-medium uppercase">Visão</span>
-							</div>
-							<p class="text-lg font-semibold text-foreground">
-								{getMappedValue(ancestryVisionMap, selectedAncestry?.vision)}
-							</p>
-						</div>
+						{/each}
 					</div>
 				</div>
 
 				<div
-					class="relative min-h-56 overflow-hidden border-t border-border bg-surface-raised lg:border-t-0 lg:border-l"
+					class="relative flex h-40 items-center justify-center overflow-hidden border-t border-border bg-surface-raised lg:h-auto lg:min-h-56 lg:self-stretch lg:border-t-0 lg:border-l"
 				>
-					<img
-						src={selectedAncestry?.img}
-						alt={selectedAncestry?.name}
-						class="h-full min-h-56 w-full object-cover"
-					/>
+					<div class="relative aspect-square w-40 shrink-0 lg:w-full">
+						<img
+							src={selectedAncestry?.img}
+							alt={selectedAncestry?.name}
+							class="absolute inset-0 size-full object-contain object-center p-2"
+						/>
+					</div>
 					<div
-						class="absolute inset-x-0 bottom-0 bg-linear-to-t from-surface-raised to-transparent p-5 pt-14"
+						class="absolute inset-x-0 bottom-0 bg-linear-to-t from-surface-raised to-transparent p-3 pt-10"
 					>
-						<div class="flex flex-wrap gap-2">
-							{#each selectedAncestry?.traits as trait (trait)}
+						<div class="flex flex-wrap gap-1.5">
+							{#each selectedAncestry?.traits ?? [] as trait (trait)}
 								<span
-									class="rounded-full border border-border bg-background/80 px-2.5 py-1 text-xs text-muted-foreground"
+									class="rounded-full border border-border bg-background/80 px-2 py-0.5 text-[11px] text-muted-foreground"
 								>
 									{trait}
 								</span>
@@ -98,30 +141,52 @@
 				</div>
 			</div>
 
-			<div class="grid gap-6 border-t border-border p-6 sm:grid-cols-2 sm:p-8">
+			<div class="grid gap-4 border-t border-border p-4 sm:grid-cols-2 sm:p-5">
 				<div>
-					<h3 class="mb-3 text-sm font-semibold text-foreground">Aumentos e fraquezas</h3>
-					<div class="flex flex-wrap gap-2">
-						{#each selectedAncestry?.boosts as boost (boost)}
-							<span class="rounded-md bg-success/15 px-2.5 py-1 text-xs font-medium text-success"
+					<h3 class="mb-2 text-xs font-semibold text-foreground">Aumentos e fraquezas</h3>
+					<div class="flex min-h-7 flex-wrap gap-1.5">
+						{#each selectedAncestry?.boosts ?? [] as boost (boost)}
+							<span
+								class="rounded-md bg-success/15 px-2 py-0.5 my-auto text-[11px] font-medium text-success"
 								>+{boost}</span
 							>
 						{/each}
-						{#each selectedAncestry?.flaws as flaw (flaw)}
-							<span class="rounded-md bg-danger/15 px-2.5 py-1 text-xs font-medium text-danger"
+						{#each selectedAncestry?.flaws ?? [] as flaw (flaw)}
+							<span class="rounded-md bg-danger/15 px-2 py-0.5 my-auto text-[11px] font-medium text-danger"
 								>-{flaw}</span
 							>
 						{/each}
 					</div>
 				</div>
 				<div>
-					<div class="mb-3 flex items-center gap-2">
-						<Languages size={16} class="text-primary-300" />
-						<h3 class="text-sm font-semibold text-foreground">Idiomas</h3>
+					<div class="mb-2 flex items-center gap-1.5">
+						<Languages size={14} class="text-primary-300" />
+						<h3 class="text-xs font-semibold text-foreground">Idiomas</h3>
 					</div>
-					<p class="text-sm text-muted-foreground">{selectedAncestry?.languages.join(', ')}</p>
+					<p class="text-xs text-muted-foreground">
+						{selectedAncestry?.languages.join(', ')}
+					</p>
 				</div>
 			</div>
+
+			{#if selectedFeatures.length}
+				<div class="border-t border-border p-4 sm:p-5">
+					<h3 class="mb-2 text-xs font-semibold text-foreground">Traços ancestrais</h3>
+					<div class="max-h-28 space-y-2 overflow-y-auto overscroll-contain pr-1">
+						{#each selectedFeatures as feature (feature.id)}
+							<div class="rounded-md border border-border bg-surface-raised px-3 py-2">
+								<p class="text-xs font-semibold text-foreground">{feature.name}</p>
+								<p
+									class="mt-1 line-clamp-2 text-[11px] leading-4 text-muted-foreground"
+									title={formatFeatureDescription(feature.description)}
+								>
+									{formatFeatureDescription(feature.description)}
+								</p>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
 		</div>
 	</section>
 
@@ -140,25 +205,29 @@
 			{#each ancestries as ancestry (ancestry.id)}
 				<button
 					type="button"
-					class="group overflow-hidden rounded-md border bg-surface text-left transition-colors hover:border-primary-500 hover:bg-surface-raised {selectedAncestry?.id ===
+					class="group flex w-full flex-col overflow-hidden rounded-md border bg-surface text-left transition-colors hover:border-primary-500 hover:bg-surface-raised {selectedAncestry?.id ===
 					ancestry.id
 						? 'border-primary-500 ring-1 ring-primary-500'
 						: 'border-border'}"
 					onclick={() => (selectedAncestry = ancestry)}
 				>
-					<img
-						src={ancestry.img}
-						alt=""
-						class="aspect-4/3 w-full object-cover opacity-80 transition-opacity group-hover:opacity-100"
-					/>
-					<div class="p-3">
-						<div class="flex items-center justify-between gap-2">
+					<div class="relative aspect-square w-full overflow-hidden bg-surface-raised">
+						<img
+							src={ancestry.img}
+							alt=""
+							class="absolute inset-0 size-full object-contain object-center p-2 opacity-80 transition-opacity group-hover:opacity-100"
+						/>
+					</div>
+					<div class="flex flex-1 flex-col p-3">
+						<div class="flex min-h-5 items-center justify-between gap-2">
 							<h3 class="truncate text-sm font-semibold text-foreground">{ancestry.name}</h3>
-							{#if selectedAncestry?.id === ancestry.id}
-								<Check size={15} class="shrink-0 text-primary-400" />
-							{/if}
+							<span class="inline-flex size-4 shrink-0 items-center justify-center">
+								{#if selectedAncestry?.id === ancestry.id}
+									<Check size={15} class="text-primary-400" />
+								{/if}
+							</span>
 						</div>
-						<div class="mt-2 flex flex-wrap gap-1">
+						<div class="mt-auto flex min-h-10 flex-wrap content-start gap-1 pt-2">
 							{#each ancestry.boosts as boost (boost)}
 								<span
 									class="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-medium text-success"
