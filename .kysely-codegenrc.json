@@ -1,0 +1,10 @@
+{
+	"camelCase": false,
+	"dialect": "libsql",
+	"envFile": ".env",
+	"logLevel": "warn",
+	"outFile": "./src/lib/db/types.ts",
+	"singularize": true,
+	"typeOnlyImports": true,
+	"url": "env(TURSO_DATABASE_URL)"
+}
