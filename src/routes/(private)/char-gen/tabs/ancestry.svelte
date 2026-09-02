@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Check, Heart, Languages, Move, Sparkles, Swords } from 'lucide-svelte';
-	import ancestries from '$lib/data/ancestries.json';
-	import ancestryItems from '$lib/data/items/ancestries.json';
+	import ancestries from '../../../../../data/ancestries.json';
+	import ancestryItems from '../../../../../data/items/ancestries.json';
 	import { ancestrySizeMap, ancestryVisionMap, getMappedValue } from '$lib/utils/map';
 	import { cn } from '$lib/utils/ui';
 
@@ -147,12 +147,13 @@
 					<div class="flex min-h-7 flex-wrap gap-1.5">
 						{#each selectedAncestry?.boosts ?? [] as boost (boost)}
 							<span
-								class="rounded-md bg-success/15 px-2 py-0.5 my-auto text-[11px] font-medium text-success"
+								class="my-auto rounded-md bg-success/15 px-2 py-0.5 text-[11px] font-medium text-success"
 								>+{boost}</span
 							>
 						{/each}
 						{#each selectedAncestry?.flaws ?? [] as flaw (flaw)}
-							<span class="rounded-md bg-danger/15 px-2 py-0.5 my-auto text-[11px] font-medium text-danger"
+							<span
+								class="my-auto rounded-md bg-danger/15 px-2 py-0.5 text-[11px] font-medium text-danger"
 								>-{flaw}</span
 							>
 						{/each}
@@ -169,24 +170,22 @@
 				</div>
 			</div>
 
-			{#if selectedFeatures.length}
-				<div class="border-t border-border p-4 sm:p-5">
-					<h3 class="mb-2 text-xs font-semibold text-foreground">Traços ancestrais</h3>
-					<div class="max-h-28 space-y-2 overflow-y-auto overscroll-contain pr-1">
-						{#each selectedFeatures as feature (feature.id)}
-							<div class="rounded-md border border-border bg-surface-raised px-3 py-2">
-								<p class="text-xs font-semibold text-foreground">{feature.name}</p>
-								<p
-									class="mt-1 line-clamp-2 text-[11px] leading-4 text-muted-foreground"
-									title={formatFeatureDescription(feature.description)}
-								>
-									{formatFeatureDescription(feature.description)}
-								</p>
-							</div>
-						{/each}
-					</div>
+			<div class="border-t border-border p-4 sm:p-5">
+				<h3 class="mb-2 text-xs font-semibold text-foreground">Traços ancestrais</h3>
+				<div class="h-24 space-y-2 overflow-y-auto overscroll-contain pr-1">
+					{#each selectedFeatures as feature (feature.id)}
+						<div class="rounded-md border border-border bg-surface-raised px-3 py-2">
+							<p class="text-xs font-semibold text-foreground">{feature.name}</p>
+							<p
+								class="mt-1 line-clamp-2 text-[11px] leading-4 text-muted-foreground"
+								title={formatFeatureDescription(feature.description)}
+							>
+								{formatFeatureDescription(feature.description)}
+							</p>
+						</div>
+					{/each}
 				</div>
-			{/if}
+			</div>
 		</div>
 	</section>
 

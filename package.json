@@ -13,7 +13,11 @@
 		"lint": "prettier --check . && eslint . --cache",
 		"lint:fix": "eslint . --fix",
 		"format": "prettier --write .",
-		"seed": "tsx --env-file=.env scripts/seed-catalog.ts"
+		"migrate": "tsx scripts/migrate.ts",
+		"migrate:down": "tsx scripts/migrate-down.ts",
+		"migrate:new": "tsx scripts/create-migration.ts",
+		"db:seed": "tsx scripts/seed.ts",
+		"db:codegen": "kysely-codegen"
 	},
 	"lint-staged": {
 		"*.{js,ts,svelte,svx}": [
@@ -37,6 +41,7 @@
 		"@tailwindcss/vite": "^4.1.18",
 		"@types/node": "^26.4.1",
 		"clsx": "^2.1.1",
+		"dotenv": "^17.4.2",
 		"eslint": "^10.0.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.14.0",
