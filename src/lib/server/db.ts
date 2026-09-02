@@ -7,6 +7,6 @@ export function getDb() {
 	if (db) return db;
 
 	const env = getEnv();
-	db = createCatalogDb(env.TURSO_DATABASE_URL, env.TURSO_AUTH_TOKEN);
+	db = createCatalogDb(env.TURSO_CATALOG_DB_URL, env.TURSO_CATALOG_AUTH_TOKEN);
 	return db;
 }

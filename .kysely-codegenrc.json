@@ -6,5 +6,5 @@
 	"outFile": "./src/lib/db/types.ts",
 	"singularize": true,
 	"typeOnlyImports": true,
-	"url": "env(TURSO_DATABASE_URL)"
+	"url": "env(TURSO_CATALOG_DB_URL)"
 }

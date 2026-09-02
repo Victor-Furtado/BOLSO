@@ -3,7 +3,7 @@
 		"id": "AzGJN1wwLFaLJIeo",
 		"name": "Adaptação Aquática",
 		"actionType": "passive",
-		"description": "<p>Sua biologia reptiliana permite que você prenda a respiração por muito tempo. Você recebe o talento geral Controle da Respiração como um talento bônus.</p>",
+		"description": "Sua biologia reptiliana permite que você prenda a respiração por muito tempo. Você recebe o talento geral Controle da Respiração como um talento bônus.",
 		"rarity": "common",
 		"traits": ["lizardfolk"],
 		"type": "feat"
@@ -12,7 +12,7 @@
 		"id": "d5TYEND07kwWRBIq",
 		"name": "Graça Aquática",
 		"actionType": "passive",
-		"description": "<p>Quando você obtém um sucesso em um teste de resistência contra um efeito de água, o resultado se torna um sucesso crítico.</p>",
+		"description": "Quando você obtém um sucesso em um teste de resistência contra um efeito de água, o resultado se torna um sucesso crítico.",
 		"rarity": "common",
 		"traits": [],
 		"type": "feat"
@@ -21,7 +21,7 @@
 		"id": "RYrY7o0i6s7KW9io",
 		"name": "Núcleo de Autômato",
 		"actionType": "passive",
-		"description": "<p>Seu corpo contém um núcleo de autômato infundido com quintessência planar que lhe concede poder para realizar diversas tarefas e abriga sua alma e energia vital. Essa energia vital flui por você de modo semelhante ao sangue dos humanoides. Como resultado, você é uma criatura viva. Você não possui as imunidades típicas de construções, pode ser afetado por efeitos que tenham como alvo uma criatura viva e pode recuperar Pontos de Vida normalmente por meio de energia de vitalidade. Além disso, você não é destruído ao ser reduzido a 0 Pontos de Vida. Em vez disso, sua energia vital tenta mantê-lo ativo mesmo em situações extremas; você fica nocauteado e começa a morrer ao ser reduzido a 0 Pontos de Vida.</p>",
+		"description": "Seu corpo contém um núcleo de autômato infundido com quintessência planar que lhe concede poder para realizar diversas tarefas e abriga sua alma e energia vital. Essa energia vital flui por você de modo semelhante ao sangue dos humanoides. Como resultado, você é uma criatura viva. Você não possui as imunidades típicas de construções, pode ser afetado por efeitos que tenham como alvo uma criatura viva e pode recuperar Pontos de Vida normalmente por meio de energia de vitalidade. Além disso, você não é destruído ao ser reduzido a 0 Pontos de Vida. Em vez disso, sua energia vital tenta mantê-lo ativo mesmo em situações extremas; você fica nocauteado e começa a morrer ao ser reduzido a 0 Pontos de Vida.",
 		"rarity": "common",
 		"traits": ["automaton"],
 		"type": "feat"
@@ -30,7 +30,7 @@
 		"id": "ItQDbIiqpb50Zbtm",
 		"name": "Forma Desperta",
 		"actionType": "passive",
-		"description": "<p>O despertar alterou sua forma, permitindo que você fale verbalmente e se mantenha sobre duas pernas. Você pode vestir, segurar, empunhar e usar itens. Quais membros você usa para manipular itens e quantos são fica a critério seu e do mestre, mas, para as regras, você funciona como um humanoide com duas mãos.</p>",
+		"description": "O despertar alterou sua forma, permitindo que você fale verbalmente e se mantenha sobre duas pernas. Você pode vestir, segurar, empunhar e usar itens. Quais membros você usa para manipular itens e quantos são fica a critério seu e do mestre, mas, para as regras, você funciona como um humanoide com duas mãos.",
 		"rarity": "common",
 		"traits": [],
 		"type": "feat"
@@ -39,7 +39,7 @@
 		"id": "0qHN69NF7JBWKO8v",
 		"name": "Mente Desperta",
 		"actionType": "passive",
-		"description": "<p>O despertar alterou sua mente. Você não é mais um animal, mas ainda pode fazer perguntas, receber respostas e usar a perícia Diplomacia com animais de sua espécie. Ao se lembrar de seus instintos, você pode se permitir ser afetado por magias e outros efeitos como se fosse um animal.</p>",
+		"description": "O despertar alterou sua mente. Você não é mais um animal, mas ainda pode fazer perguntas, receber respostas e usar a perícia Diplomacia com animais de sua espécie. Ao se lembrar de seus instintos, você pode se permitir ser afetado por magias e outros efeitos como se fosse um animal.",
 		"rarity": "common",
 		"traits": [],
 		"type": "feat"
@@ -48,7 +48,7 @@
 		"id": "PCLnnWPbiiSzrxEo",
 		"name": "Grandes Dentes Afiados",
 		"actionType": "passive",
-		"description": "<p>Sua boca está eriçada de dentes afiados como navalhas. Você recebe um ataque desarmado de mandíbulas que causa 1d4 de dano perfurante. Suas mandíbulas pertencem ao grupo de pancadaria e têm os traços finesse e desarmado.</p>",
+		"description": "Sua boca está eriçada de dentes afiados como navalhas. Você recebe um ataque desarmado de mandíbulas que causa 1d4 de dano perfurante. Suas mandíbulas pertencem ao grupo de pancadaria e têm os traços finesse e desarmado.",
 		"rarity": "common",
 		"traits": ["dragonet"],
 		"type": "feat"
@@ -57,7 +57,7 @@
 		"id": "jatezR4bENwhC6GL",
 		"name": "Mordida",
 		"actionType": "passive",
-		"description": "<p>Seus dentes afiados e mandíbulas poderosas são armas temíveis. Você tem um ataque desarmado de mandíbulas que causa 1d6 de dano perfurante. Suas mandíbulas pertencem ao grupo de pancadaria.</p>",
+		"description": "Seus dentes afiados e mandíbulas poderosas são armas temíveis. Você tem um ataque desarmado de mandíbulas que causa 1d6 de dano perfurante. Suas mandíbulas pertencem ao grupo de pancadaria.",
 		"rarity": "common",
 		"traits": ["kholo"],
 		"type": "feat"
@@ -66,7 +66,7 @@
 		"id": "NfkxFWUeG6g41e8w",
 		"name": "Garras",
 		"actionType": "passive",
-		"description": "<p>Suas garras afiadas oferecem uma alternativa aos punhos que outros humanoides levam a um combate. Você tem um ataque desarmado de garra que causa 1d4 de dano cortante e tem os traços ágil e finesse.</p>",
+		"description": "Suas garras afiadas oferecem uma alternativa aos punhos que outros humanoides levam a um combate. Você tem um ataque desarmado de garra que causa 1d4 de dano cortante e tem os traços ágil e finesse.",
 		"rarity": "common",
 		"traits": ["lizardfolk"],
 		"type": "feat"
@@ -75,7 +75,7 @@
 		"id": "E28a45fUC2OkXZXY",
 		"name": "Corpo Construído",
 		"actionType": "passive",
-		"description": "<p>Suas necessidades fisiológicas são diferentes das de criaturas vivas. Você não precisa comer nem beber. Você não precisa dormir, mas ainda precisa de um período diário de descanso. Durante esse período, deve entrar em um estado de espera recuperativo por 2 horas, semelhante ao sono, exceto que você permanece ciente do ambiente e não sofre penalidades por estar inconsciente. Assim como no sono, se você ficar tempo demais sem entrar nesse estado de espera, fica fatigado e não consegue se recuperar até permanecer em espera por 2 horas.</p>",
+		"description": "Suas necessidades fisiológicas são diferentes das de criaturas vivas. Você não precisa comer nem beber. Você não precisa dormir, mas ainda precisa de um período diário de descanso. Durante esse período, deve entrar em um estado de espera recuperativo por 2 horas, semelhante ao sono, exceto que você permanece ciente do ambiente e não sofre penalidades por estar inconsciente. Assim como no sono, se você ficar tempo demais sem entrar nesse estado de espera, fica fatigado e não consegue se recuperar até permanecer em espera por 2 horas.",
 		"rarity": "common",
 		"traits": ["automaton"],
 		"type": "feat"
@@ -84,7 +84,7 @@
 		"id": "QLSvmOid6gAdzBYi",
 		"name": "Criptomnésia",
 		"actionType": "passive",
-		"description": "<p>Você retém fragmentos de conhecimento de suas vidas anteriores. Você recebe um bônus de circunstância de +1 em testes de perícia sem treinamento.</p>",
+		"description": "Você retém fragmentos de conhecimento de suas vidas anteriores. Você recebe um bônus de circunstância de +1 em testes de perícia sem treinamento.",
 		"rarity": "common",
 		"traits": ["samsaran"],
 		"type": "feat"
@@ -93,7 +93,7 @@
 		"id": "HYefFkddD9lOhFM8",
 		"name": "Gema da Cabeça",
 		"actionType": "passive",
-		"description": "<p>Em sua fronte há uma gema que abriga sua alma. Ao conjurar qualquer magia ou ritual para trazê-lo de volta à vida, sua gema da cabeça intacta pode substituir seu corpo. Embora você possa remover livremente sua gema da cabeça, em geral é impossível que outra criatura a remova ou destrua à força, a menos que você seja morto ou incapacitado permanentemente primeiro; a critério do mestre, magias ou habilidades poderosas podem contornar essa restrição. Se sua gema da cabeça for removida ou destruída, ela pode ser regenerada com um ritual de um dia. Quando isso ocorre, quaisquer restos da gema anterior se desfazem imediatamente em pó.</p>",
+		"description": "Em sua fronte há uma gema que abriga sua alma. Ao conjurar qualquer magia ou ritual para trazê-lo de volta à vida, sua gema da cabeça intacta pode substituir seu corpo. Embora você possa remover livremente sua gema da cabeça, em geral é impossível que outra criatura a remova ou destrua à força, a menos que você seja morto ou incapacitado permanentemente primeiro; a critério do mestre, magias ou habilidades poderosas podem contornar essa restrição. Se sua gema da cabeça for removida ou destruída, ela pode ser regenerada com um ritual de um dia. Quando isso ocorre, quaisquer restos da gema anterior se desfazem imediatamente em pó.",
 		"rarity": "common",
 		"traits": ["sarangay"],
 		"type": "feat"
@@ -102,7 +102,7 @@
 		"id": "hUpYTsbLcBg4UcVp",
 		"name": "Chifres (Minotauro)",
 		"actionType": "passive",
-		"description": "<p>Seus chifres afiados são tão letais quanto lanças. Você tem um ataque desarmado de chifres que causa 1d8 de dano perfurante. Seus chifres pertencem ao grupo de pancadaria e têm o traço desarmado.</p>",
+		"description": "Seus chifres afiados são tão letais quanto lanças. Você tem um ataque desarmado de chifres que causa 1d8 de dano perfurante. Seus chifres pertencem ao grupo de pancadaria e têm o traço desarmado.",
 		"rarity": "common",
 		"traits": ["minotaur"],
 		"type": "feat"
@@ -111,7 +111,7 @@
 		"id": "LhgVj9GhPsXGfwAM",
 		"name": "Chifres (Sarangay)",
 		"actionType": "passive",
-		"description": "<p>Seus chifres poderosos são armas formidáveis. Você tem um ataque desarmado de chifres que causa 1d6 de dano perfurante e tem o traço empurrão. Seus chifres pertencem ao grupo de pancadaria.</p>",
+		"description": "Seus chifres poderosos são armas formidáveis. Você tem um ataque desarmado de chifres que causa 1d6 de dano perfurante e tem o traço empurrão. Seus chifres pertencem ao grupo de pancadaria.",
 		"rarity": "common",
 		"traits": ["sarangay"],
 		"type": "feat"
@@ -120,7 +120,7 @@
 		"id": "DWNRIgt3f92fSTBM",
 		"name": "Hidratação (Sereiano)",
 		"actionType": "passive",
-		"description": "<p>Seu corpo exige que você retorne a ambientes aquáticos pelo menos uma vez a cada período de 24 horas. Após as primeiras 24 horas fora da água, você sofre uma penalidade de status de –1 em testes de Fortitude. Após 48 horas, você tem dificuldade para respirar ar e começa a sufocar até ser devolvido à água.</p>\n<p>Efeito: Desidratado</p>",
+		"description": "Seu corpo exige que você retorne a ambientes aquáticos pelo menos uma vez a cada período de 24 horas. Após as primeiras 24 horas fora da água, você sofre uma penalidade de status de –1 em testes de Fortitude. Após 48 horas, você tem dificuldade para respirar ar e começa a sufocar até ser devolvido à água. Efeito: Desidratado",
 		"rarity": "common",
 		"traits": [],
 		"type": "feat"
@@ -129,7 +129,7 @@
 		"id": "DPPFBUk0l9KfRN8h",
 		"name": "Tecelagem Iivlar",
 		"actionType": "passive",
-		"description": "<p>Fio planar produzido por criaturas chamadas iivlars está tecido em sua pele. Esse fio brilha com luz fraca em uma emanação de 10 pés. Você pode Sustentar para extinguir, reativar ou ajustar a coloração dessa luz.</p>",
+		"description": "Fio planar produzido por criaturas chamadas iivlars está tecido em sua pele. Esse fio brilha com luz fraca em uma emanação de 10 pés. Você pode Sustentar para extinguir, reativar ou ajustar a coloração dessa luz.",
 		"rarity": "common",
 		"traits": ["jotunborn"],
 		"type": "feat"
@@ -138,7 +138,7 @@
 		"id": "y1EmCv2cEb5hXBwx",
 		"name": "Olhos Aguçados",
 		"actionType": "passive",
-		"description": "<p>Seus olhos são aguçados, permitindo que você perceba pequenos detalhes sobre criaturas dissimuladas ou até invisíveis que outros poderiam perder. Você recebe um bônus de circunstância de +2 ao usar a ação Procurar para encontrar criaturas escondidas ou não detectadas a até 30 pés de você. Quando você tem como alvo um oponente que está dissimulado ou escondido de você, reduza a CD do teste plano para 3 contra um alvo dissimulado ou 9 contra um escondido.</p>",
+		"description": "Seus olhos são aguçados, permitindo que você perceba pequenos detalhes sobre criaturas dissimuladas ou até invisíveis que outros poderiam perder. Você recebe um bônus de circunstância de +2 ao usar a ação Procurar para encontrar criaturas escondidas ou não detectadas a até 30 pés de você. Quando você tem como alvo um oponente que está dissimulado ou escondido de você, reduza a CD do teste plano para 3 contra um alvo dissimulado ou 9 contra um escondido.",
 		"rarity": "common",
 		"traits": ["halfling"],
 		"type": "feat"
@@ -147,7 +147,7 @@
 		"id": "sL1hHxrHdMNIZVAd",
 		"name": "Cair em Pé",
 		"actionType": "passive",
-		"description": "<p>Quando você cai, sofre apenas metade do dano normal e não aterrissa caído.</p>",
+		"description": "Quando você cai, sofre apenas metade do dano normal e não aterrissa caído.",
 		"rarity": "common",
 		"traits": ["catfolk"],
 		"type": "feat"
@@ -156,7 +156,7 @@
 		"id": "oQ5478uONrGAWRgF",
 		"name": "Magífago",
 		"actionType": "passive",
-		"description": "<p>Os diversos nódulos pelo seu corpo absorvem magia latente do mundo ao seu redor. Você não precisa comer nem beber, a menos que esteja em um ambiente especialmente pobre em magia (como os Ermos da Mana). Escolha qual tradição de magia você mais consumiu como larva; esse tipo de magia se tornou tão arraigado em seu corpo que altera a tradição de todas as magias e ações mágicas surki para essa tradição.</p>",
+		"description": "Os diversos nódulos pelo seu corpo absorvem magia latente do mundo ao seu redor. Você não precisa comer nem beber, a menos que esteja em um ambiente especialmente pobre em magia (como os Ermos da Mana). Escolha qual tradição de magia você mais consumiu como larva; esse tipo de magia se tornou tão arraigado em seu corpo que altera a tradição de todas as magias e ações mágicas surki para essa tradição.",
 		"rarity": "common",
 		"traits": [],
 		"type": "feat"
@@ -165,7 +165,7 @@
 		"id": "VX267tc1uwocRu39",
 		"name": "Montaria",
 		"actionType": "passive",
-		"description": "<p>Seu corpo equino é bem adequado para carregar aliados de confiança. Um personagem jogador pode montá-lo se for uma categoria de tamanho menor que você (tamanho Médio, para a maioria dos centauros), em vez de precisar ser duas categorias de tamanho menor.</p>",
+		"description": "Seu corpo equino é bem adequado para carregar aliados de confiança. Um personagem jogador pode montá-lo se for uma categoria de tamanho menor que você (tamanho Médio, para a maioria dos centauros), em vez de precisar ser duas categorias de tamanho menor.",
 		"rarity": "common",
 		"traits": ["centaur"],
 		"type": "feat"
@@ -174,7 +174,7 @@
 		"id": "gZvgt5n5OYO3av2V",
 		"name": "Escalador Natural",
 		"actionType": "passive",
-		"description": "<p>Você recebe um bônus de circunstância de +2 em testes de Atletismo para Escalar.</p>",
+		"description": "Você recebe um bônus de circunstância de +2 em testes de Atletismo para Escalar.",
 		"rarity": "common",
 		"traits": [],
 		"type": "feat"
@@ -183,7 +183,7 @@
 		"id": "Sm3tKetM6kddTio3",
 		"name": "Nutrição Vegetal",
 		"actionType": "passive",
-		"description": "<p>Você obtém nutrição da mesma forma que as plantas ou fungos que correspondem ao seu tipo de corpo normalmente o fazem, por alguma combinação de fotossíntese, absorção de minerais pelas raízes ou consumo de matéria em decomposição. Em geral, você não precisa pagar por comida. Se normalmente depende de fotossíntese e fica sem luz solar por 1 semana, começa a morrer de fome. Você pode obter nutrição de frascos de luz solar especialmente formulados em vez de luz solar natural, mas esses frascos custam 10 vezes mais que rações padrão (ou 40 pp).</p>",
+		"description": "Você obtém nutrição da mesma forma que as plantas ou fungos que correspondem ao seu tipo de corpo normalmente o fazem, por alguma combinação de fotossíntese, absorção de minerais pelas raízes ou consumo de matéria em decomposição. Em geral, você não precisa pagar por comida. Se normalmente depende de fotossíntese e fica sem luz solar por 1 semana, começa a morrer de fome. Você pode obter nutrição de frascos de luz solar especialmente formulados em vez de luz solar natural, mas esses frascos custam 10 vezes mais que rações padrão (ou 40 pp).",
 		"rarity": "common",
 		"traits": ["leshy"],
 		"type": "feat"
@@ -192,7 +192,7 @@
 		"id": "S5XriNcxiVvqZEu0",
 		"name": "Robusto",
 		"actionType": "passive",
-		"description": "<p>Você aumenta seus limites máximo e de sobrecarga de Carga em 2.</p>",
+		"description": "Você aumenta seus limites máximo e de sobrecarga de Carga em 2.",
 		"rarity": "common",
 		"traits": ["centaur"],
 		"type": "feat"
@@ -201,7 +201,7 @@
 		"id": "qJD3PJdoSXFrZEwr",
 		"name": "Bico Afiado",
 		"actionType": "passive",
-		"description": "<p>Com seu bico afiado, você nunca fica sem uma arma. Você tem um ataque desarmado de bico que causa 1d6 de dano perfurante. Seu bico pertence ao grupo de pancadaria e tem os traços finesse e desarmado.</p>",
+		"description": "Com seu bico afiado, você nunca fica sem uma arma. Você tem um ataque desarmado de bico que causa 1d6 de dano perfurante. Seu bico pertence ao grupo de pancadaria e tem os traços finesse e desarmado.",
 		"rarity": "common",
 		"traits": [],
 		"type": "feat"
@@ -210,7 +210,7 @@
 		"id": "sW4ObB8wyLPPYvGj",
 		"name": "Dentes Afiados",
 		"actionType": "passive",
-		"description": "<p>Seus incisivos proeminentes oferecem uma alternativa aos punhos que outros humanoides levam a um combate. Você tem um ataque desarmado de mandíbulas que causa 1d4 de dano perfurante, pertence ao grupo de pancadaria e tem os traços ágil e finesse.</p>",
+		"description": "Seus incisivos proeminentes oferecem uma alternativa aos punhos que outros humanoides levam a um combate. Você tem um ataque desarmado de mandíbulas que causa 1d4 de dano perfurante, pertence ao grupo de pancadaria e tem os traços ágil e finesse.",
 		"rarity": "common",
 		"traits": ["ratfolk"],
 		"type": "feat"
@@ -219,7 +219,7 @@
 		"id": "D6AjSg0JOYtn7Coa",
 		"name": "Alma do Andarilho",
 		"actionType": "passive",
-		"description": "<p>Sua alma é especialmente capaz de retornar ao ciclo de reencarnação. Quando você é o alvo de Reviver os Mortos, Reencarnar ou de um ritual semelhante que o traria de volta à vida, o conjurador primário usa o resultado um grau de sucesso melhor do que o obtido na rolagem. Você sempre retorna à vida como um samsaran, mesmo que o ritual o reencarnasse em um corpo de outra ancestralidade.</p>",
+		"description": "Sua alma é especialmente capaz de retornar ao ciclo de reencarnação. Quando você é o alvo de Reviver os Mortos, Reencarnar ou de um ritual semelhante que o traria de volta à vida, o conjurador primário usa o resultado um grau de sucesso melhor do que o obtido na rolagem. Você sempre retorna à vida como um samsaran, mesmo que o ritual o reencarnasse em um corpo de outra ancestralidade.",
 		"rarity": "common",
 		"traits": ["samsaran"],
 		"type": "feat"
@@ -228,7 +228,7 @@
 		"id": "RjWv5oPKZtNQgEiK",
 		"name": "Asas (Dragonete)",
 		"actionType": "passive",
-		"description": "<p>Suas asas talvez não sejam tão fortes quanto as de outros dragonetes, mas ainda assim podem impedir quedas descontroladas. Você não sofre dano de queda, independentemente da distância.</p>",
+		"description": "Suas asas talvez não sejam tão fortes quanto as de outros dragonetes, mas ainda assim podem impedir quedas descontroladas. Você não sofre dano de queda, independentemente da distância.",
 		"rarity": "common",
 		"traits": ["dragonet"],
 		"type": "feat"

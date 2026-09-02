@@ -2,8 +2,8 @@ import { env as dynamicEnv } from '$env/dynamic/private';
 import { z } from 'zod';
 
 const envSchema = z.object({
-	TURSO_DATABASE_URL: z.string().min(1),
-	TURSO_AUTH_TOKEN: z.preprocess(
+	TURSO_CATALOG_DB_URL: z.string().min(1),
+	TURSO_CATALOG_AUTH_TOKEN: z.preprocess(
 		(value) => (value === '' ? undefined : value),
 		z.string().min(1).optional()
 	)
