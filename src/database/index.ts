@@ -1,1 +1,0 @@
-export { createCatalogDb } from './client';

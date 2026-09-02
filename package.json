@@ -17,7 +17,7 @@
 		"migrate:down": "tsx scripts/migrate-down.ts",
 		"migrate:new": "tsx scripts/create-migration.ts",
 		"db:seed": "tsx scripts/seed.ts",
-		"db:codegen": "kysely-codegen"
+		"db:codegen": "tsx scripts/codegen.ts"
 	},
 	"lint-staged": {
 		"*.{js,ts,svelte,svx}": [
@@ -47,6 +47,7 @@
 		"eslint-plugin-svelte": "^3.14.0",
 		"globals": "^17.1.0",
 		"husky": "^9.1.7",
+		"kysely-codegen": "^0.20.0",
 		"lint-staged": "^17.0.0",
 		"mdsvex": "^0.12.6",
 		"prettier": "^3.8.1",

@@ -3,7 +3,7 @@
 	"dialect": "libsql",
 	"envFile": ".env",
 	"logLevel": "warn",
-	"outFile": "./src/lib/db/types.ts",
+	"outFile": "./src/database/types.d.ts",
 	"singularize": true,
 	"typeOnlyImports": true,
 	"url": "env(TURSO_CATALOG_DB_URL)"

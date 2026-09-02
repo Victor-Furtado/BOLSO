@@ -1,4 +1,4 @@
-import { db } from '$database/client';
+import { db } from './db';
 
 async function seed() {
 	console.log('🌱 Seeding database...\n');
