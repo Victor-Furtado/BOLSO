@@ -11,7 +11,7 @@ const migrator = new Migrator({
 		path,
 		migrationFolder: path.join(
 			path.dirname(fileURLToPath(import.meta.url)),
-			'../../src/database/migrations'
+			'../src/database/migrations'
 		)
 	})
 });

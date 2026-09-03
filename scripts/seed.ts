@@ -1,10 +1,13 @@
 import { db } from './db';
+import ancestriesJson from '../data/ancestries.json' with { type: 'json' };
 
 async function seed() {
-	console.log('🌱 Seeding database...\n');
+	console.log('🌱 Seeding database...');
 
-	console.log('\nNothing to seed\n');
-	console.log('\n✅ Seed completed!\n');
+	console.log('\n🧬 Seeding ancestries...');
+	console.log(`🧬 Seeded ${ancestriesJson.length} ancestries!`);
+
+	console.log('✅ Seed completed!');
 
 	await db.destroy();
 }

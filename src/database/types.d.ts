@@ -10,37 +10,63 @@ export type Generated<T> =
 		? ColumnType<S, I | undefined, U>
 		: ColumnType<T, T | undefined, T>;
 
-export interface Ancestry {
-	boosts: string;
-	custom: Generated<number>;
-	description: string;
-	enable: Generated<number>;
-	flaws: string;
-	hands: number;
-	hp: number;
-	id: string | null;
-	img: string | null;
-	languages: string;
-	name: string;
-	size: string;
-	speed: number;
-	traits: string;
-	vision: string;
+export interface CatalogEffect {
+	created_at: Generated<string>;
+	data: string;
+	entry_id: string;
+	id: string;
+	type: string;
+	updated_at: Generated<string>;
 }
 
-export interface Feat {
-	action_type: string;
-	custom: Generated<number>;
-	description: string;
-	enable: Generated<number>;
-	id: string | null;
+export interface CatalogEntry {
+	created_at: Generated<string>;
+	data: string;
+	description: string | null;
+	id: string;
+	level: number | null;
 	name: string;
-	rarity: string;
+	rarity: string | null;
+	slug: string;
+	source_id: string;
 	traits: string;
 	type: string;
+	updated_at: Generated<string>;
+}
+
+export interface CatalogPrerequisite {
+	created_at: Generated<string>;
+	entry_id: string;
+	expression: string;
+	id: string;
+	updated_at: Generated<string>;
+}
+
+export interface CatalogRelation {
+	created_at: Generated<string>;
+	data: string | null;
+	id: string;
+	source_entry_id: string;
+	target_entry_id: string;
+	type: string;
+	updated_at: Generated<string>;
+}
+
+export interface CatalogSource {
+	created_at: Generated<string>;
+	id: string;
+	name: string;
+	publisher: string | null;
+	slug: string;
+	type: string;
+	updated_at: Generated<string>;
+	version: string | null;
 }
 
 export interface DB {
-	ancestries: Ancestry;
-	feats: Feat;
+	catalog_effect: CatalogEffect;
+	catalog_entry: CatalogEntry;
+	catalog_prerequisite: CatalogPrerequisite;
+	catalog_relation: CatalogRelation;
+	catalog_source: CatalogSource;
 }
