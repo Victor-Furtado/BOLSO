@@ -4,7 +4,8 @@ import type { Ancestry } from '../types';
 
 export async function getAncestries(): Promise<Ancestry[]> {
 	const result = await findMany({
-		type: 'ancestry'
+		type: 'ancestry',
+		enabled: true
 	});
 
 	return toAncestries(result);

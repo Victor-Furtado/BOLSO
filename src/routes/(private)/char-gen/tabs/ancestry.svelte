@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { Check, Heart, Languages, Move, Sparkles, Swords } from 'lucide-svelte';
-	import ancestries from '../../../../../data/ancestries.json';
-	import ancestryItems from '../../../../../data/items/ancestries.json';
 	import { ancestrySizeMap, ancestryVisionMap, getMappedValue } from '$lib/utils/map';
 	import { cn } from '$lib/utils/ui';
+	import type { Ancestry } from '$lib/server/catalog/types';
 
-	type Ancestry = (typeof ancestries)[number];
+	let { ancestries }: { ancestries: Ancestry[] } = $props();
 
 	let selectedAncestry = $state<Ancestry | null>(null);
 
@@ -18,41 +17,29 @@
 	const selectedStats = $derived([
 		{
 			label: 'Vitalidade',
-			value: selectedAncestry ? `${selectedAncestry.hp} PV` : '',
+			value: selectedAncestry ? `${selectedAncestry.data.hp} PV` : '',
 			Icon: Heart
 		},
 		{
 			label: 'Movimento',
-			value: selectedAncestry ? `${selectedAncestry.speed} pés` : '',
+			value: selectedAncestry ? `${selectedAncestry.data.speed} pés` : '',
 			Icon: Move
 		},
 		{
 			label: 'Tamanho',
-			value: getMappedValue(ancestrySizeMap, selectedAncestry?.size) ?? '',
+			value: getMappedValue(ancestrySizeMap, selectedAncestry?.data.size) ?? '',
 			Icon: Swords
 		},
 		{
 			label: 'Visão',
-			value: getMappedValue(visionShortMap, selectedAncestry?.vision) ?? '',
-			detail: getMappedValue(ancestryVisionMap, selectedAncestry?.vision) ?? '',
+			value: getMappedValue(visionShortMap, selectedAncestry?.data.vision) ?? '',
+			detail: getMappedValue(ancestryVisionMap, selectedAncestry?.data.vision) ?? '',
 			Icon: Sparkles
 		}
 	]);
 
-	const ancestryItemById = new Map(ancestryItems.map((item) => [item.id, item]));
-
-	const selectedFeatures = $derived(
-		(selectedAncestry?.items ?? [])
-			.map((id) => ancestryItemById.get(id))
-			.filter((item): item is (typeof ancestryItems)[number] => item != null)
-	);
-
-	function formatFeatureDescription(html: string) {
-		return html
-			.replace(/@UUID\[[^\]]*Item\.([^\]]+)\]/g, '$1')
-			.replace(/<[^>]+>/g, ' ')
-			.replace(/\s+/g, ' ')
-			.trim();
+	function cleanDescription(description: string | null): string {
+		return description?.replace(/@[^\s<]*/g, '').trim() ?? '';
 	}
 </script>
 
@@ -85,7 +72,9 @@
 						<div
 							class="h-16 max-h-16 min-h-16 max-w-3xl shrink-0 overflow-y-auto overscroll-contain pr-2 text-sm leading-5 text-muted-foreground"
 						>
-							<p>{selectedAncestry?.description}</p>
+							<!-- Official PF2E descriptions are trusted catalog content. -->
+							<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+							{@html cleanDescription(selectedAncestry?.description ?? null)}
 						</div>
 					{/key}
 
@@ -120,7 +109,7 @@
 				>
 					<div class="relative aspect-square w-40 shrink-0 lg:w-full">
 						<img
-							src={selectedAncestry?.img}
+							src={selectedAncestry?.image}
 							alt={selectedAncestry?.name}
 							class="absolute inset-0 size-full object-contain object-center p-2"
 						/>
@@ -129,7 +118,7 @@
 						class="absolute inset-x-0 bottom-0 bg-linear-to-t from-surface-raised to-transparent p-3 pt-10"
 					>
 						<div class="flex flex-wrap gap-1.5">
-							{#each selectedAncestry?.traits ?? [] as trait (trait)}
+							{#each selectedAncestry?.traits ? JSON.parse(selectedAncestry.traits) : [] as trait (trait)}
 								<span
 									class="rounded-full border border-border bg-background/80 px-2 py-0.5 text-[11px] text-muted-foreground"
 								>
@@ -145,13 +134,13 @@
 				<div>
 					<h3 class="mb-2 text-xs font-semibold text-foreground">Aumentos e fraquezas</h3>
 					<div class="flex min-h-7 flex-wrap gap-1.5">
-						{#each selectedAncestry?.boosts ?? [] as boost (boost)}
+						{#each selectedAncestry?.data.boosts ?? [] as boost (boost)}
 							<span
 								class="my-auto rounded-md bg-success/15 px-2 py-0.5 text-[11px] font-medium text-success"
 								>+{boost}</span
 							>
 						{/each}
-						{#each selectedAncestry?.flaws ?? [] as flaw (flaw)}
+						{#each selectedAncestry?.data.flaws ?? [] as flaw (flaw)}
 							<span
 								class="my-auto rounded-md bg-danger/15 px-2 py-0.5 text-[11px] font-medium text-danger"
 								>-{flaw}</span
@@ -165,7 +154,7 @@
 						<h3 class="text-xs font-semibold text-foreground">Idiomas</h3>
 					</div>
 					<p class="text-xs text-muted-foreground">
-						{selectedAncestry?.languages.join(', ')}
+						{selectedAncestry?.data.languages.join(', ')}
 					</p>
 				</div>
 			</div>
@@ -173,17 +162,10 @@
 			<div class="border-t border-border p-4 sm:p-5">
 				<h3 class="mb-2 text-xs font-semibold text-foreground">Traços ancestrais</h3>
 				<div class="h-24 space-y-2 overflow-y-auto overscroll-contain pr-1">
-					{#each selectedFeatures as feature (feature.id)}
-						<div class="rounded-md border border-border bg-surface-raised px-3 py-2">
-							<p class="text-xs font-semibold text-foreground">{feature.name}</p>
-							<p
-								class="mt-1 line-clamp-2 text-[11px] leading-4 text-muted-foreground"
-								title={formatFeatureDescription(feature.description)}
-							>
-								{formatFeatureDescription(feature.description)}
-							</p>
-						</div>
-					{/each}
+					<p class="text-xs text-muted-foreground">
+						Os efeitos específicos desta ancestralidade serão exibidos aqui quando forem carregados
+						pelo catálogo.
+					</p>
 				</div>
 			</div>
 		</div>
@@ -212,7 +194,7 @@
 				>
 					<div class="relative aspect-square w-full overflow-hidden bg-surface-raised">
 						<img
-							src={ancestry.img}
+							src={ancestry.image}
 							alt=""
 							class="absolute inset-0 size-full object-contain object-center p-2 opacity-80 transition-opacity group-hover:opacity-100"
 						/>
@@ -227,14 +209,14 @@
 							</span>
 						</div>
 						<div class="mt-auto flex min-h-10 flex-wrap content-start gap-1 pt-2">
-							{#each ancestry.boosts as boost (boost)}
+							{#each ancestry.data.boosts as boost, index (index)}
 								<span
 									class="rounded-full bg-success/15 px-2 py-0.5 text-[10px] font-medium text-success"
 								>
 									+{boost}
 								</span>
 							{/each}
-							{#each ancestry.flaws as flaw (flaw)}
+							{#each ancestry.data.flaws as flaw, index (index)}
 								<span
 									class="rounded-full bg-danger/15 px-2 py-0.5 text-[10px] font-medium text-danger"
 								>

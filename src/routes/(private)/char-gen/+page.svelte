@@ -4,6 +4,9 @@
 	import BasicInfo from './tabs/basic-info.svelte';
 	import Ancestry from './tabs/ancestry.svelte';
 	import Tab from './components/tab.svelte';
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
 
 	let tab = $state('ancestry');
 	let isMobile = $state(false);
@@ -45,7 +48,7 @@
 			<BasicInfo bind:character />
 		</Tabs.Content>
 		<Tabs.Content value="ancestry" class="space-y-6 pb-8">
-			<Ancestry />
+			<Ancestry ancestries={data.ancestries} />
 		</Tabs.Content>
 	</div>
 </Tabs.Root>

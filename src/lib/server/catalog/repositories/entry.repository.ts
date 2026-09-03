@@ -30,6 +30,7 @@ export async function findMany(filters: {
 	rarity?: string;
 	limit?: number;
 	offset?: number;
+	enabled?: boolean;
 }): Promise<Entry[]> {
 	let query = db.selectFrom('catalog_entry').selectAll().where('enabled', '=', 1);
 
@@ -44,6 +45,9 @@ export async function findMany(filters: {
 	}
 	if (filters.rarity) {
 		query = query.where('rarity', '=', filters.rarity);
+	}
+	if (filters.enabled !== undefined) {
+		query = query.where('enabled', '=', filters.enabled ? 1 : 0);
 	}
 
 	if (filters.limit) {
