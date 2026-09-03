@@ -10,6 +10,7 @@ export async function up(database: typeof db): Promise<void> {
 			col.notNull().references('catalog_source.id').onDelete('restrict').onUpdate('cascade')
 		)
 		.addColumn('type', 'text', (col) => col.notNull())
+		.addColumn('enabled', 'integer', (col) => col.notNull().defaultTo(1))
 		.addColumn('slug', 'text', (col) => col.notNull())
 		.addColumn('name', 'text', (col) => col.notNull())
 		.addColumn('description', 'text')

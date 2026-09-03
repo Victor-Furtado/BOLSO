@@ -9,8 +9,8 @@ export async function up(database: typeof db): Promise<void> {
 		.addColumn('slug', 'text', (col) => col.notNull().unique())
 		.addColumn('name', 'text', (col) => col.notNull())
 		.addColumn('type', 'text', (col) => col.notNull())
-		.addColumn('version', 'text')
-		.addColumn('publisher', 'text')
+		.addColumn('approved', 'integer', (col) => col.notNull().defaultTo(0))
+		.addColumn('license', 'text')
 		.withTimestamps()
 		.execute();
 }

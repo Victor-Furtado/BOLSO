@@ -98,6 +98,7 @@ catalog_entry
 id              TEXT PRIMARY KEY
 source_id       TEXT NOT NULL
 type            TEXT NOT NULL
+enabled         INTEGER NOT NULL DEFAULT 1
 slug            TEXT NOT NULL
 name            TEXT NOT NULL
 description     TEXT
@@ -179,6 +180,15 @@ The system MUST treat `type` as extensible.
 Adding a new Catalog type SHOULD NOT require a database migration.
 
 Application-level Zod schemas are responsible for validating type-specific data.
+
+---
+
+### `enabled`
+
+Indicates whether the entry is currently available in the Catalog. Store this
+boolean value as `INTEGER` in SQLite/Turso, using `0` for false and `1` for
+true. This is Catalog content state; it does not represent whether a character
+has selected the entry or whether a campaign has enabled it.
 
 ---
 
@@ -340,11 +350,23 @@ id              TEXT PRIMARY KEY
 slug            TEXT NOT NULL UNIQUE
 name            TEXT NOT NULL
 type            TEXT NOT NULL
-version         TEXT
-publisher       TEXT
+approved        INTEGER NOT NULL DEFAULT 0
+license         TEXT
 created_at      TEXT NOT NULL
 updated_at      TEXT NOT NULL
 ```
+
+### `approved`
+
+Indicates whether the source has been approved for use by the application. Store
+this boolean value as `INTEGER` in SQLite/Turso, using `0` for false and `1` for
+true. Approval is catalog metadata and does not represent whether content is
+enabled for a character or campaign.
+
+### `license`
+
+Identifies the license under which the source content may be used. This field is
+optional because some custom sources may not declare a license.
 
 Recommended `type` values:
 
@@ -716,22 +738,17 @@ Only add JSON-specific indexing when there is a demonstrated query requirement.
 
 ---
 
-# 15. Versioning
+# 15. Approval and licensing
 
-Catalog content MUST be versionable at the source level.
+Catalog sources MUST record their approval status and licensing information.
 
-An update to an official or homebrew source SHOULD be represented by a source version.
+Approval MUST be represented by the `approved` field on `catalog_source`.
 
-Example:
+License information SHOULD be represented by the `license` field on
+`catalog_source`.
 
-```text
-player-core
-version = 1.0.0
-```
-
-Do not encode Catalog content versions in the primary key.
-
-The entry ID should remain stable when the same logical entry receives a content update.
+Approval does not enable or disable content for a character or campaign. Those
+concerns belong to domains outside the Catalog.
 
 If an entry is fundamentally replaced by another entry, model that using a relationship such as:
 

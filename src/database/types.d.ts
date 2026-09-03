@@ -23,6 +23,7 @@ export interface CatalogEntry {
 	created_at: Generated<string>;
 	data: string;
 	description: string | null;
+	enabled: Generated<number>;
 	id: string;
 	level: number | null;
 	name: string;
@@ -53,14 +54,14 @@ export interface CatalogRelation {
 }
 
 export interface CatalogSource {
+	approved: Generated<number>;
 	created_at: Generated<string>;
 	id: string;
+	license: string | null;
 	name: string;
-	publisher: string | null;
 	slug: string;
 	type: string;
 	updated_at: Generated<string>;
-	version: string | null;
 }
 
 export interface DB {
