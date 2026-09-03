@@ -1,4 +1,4 @@
-import type { db } from '$database/client';
+import type { db } from '$lib/server/db/client';
 import './schema-helpers';
 
 export async function up(database: typeof db): Promise<void> {

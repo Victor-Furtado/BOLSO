@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { Kysely } from 'kysely';
 import { LibsqlDialect } from '@libsql/kysely-libsql';
-import { type DB } from '../src/database/types';
+import { type DB } from '../src/lib/server/db/types';
 
 dotenv.config({ quiet: true });
 
