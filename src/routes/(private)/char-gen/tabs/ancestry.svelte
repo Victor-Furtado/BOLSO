@@ -134,13 +134,13 @@
 				<div>
 					<h3 class="mb-2 text-xs font-semibold text-foreground">Aumentos e fraquezas</h3>
 					<div class="flex min-h-7 flex-wrap gap-1.5">
-						{#each selectedAncestry?.data.boosts ?? [] as boost (boost)}
+						{#each selectedAncestry?.data.boosts ?? [] as boost, index (index)}
 							<span
 								class="my-auto rounded-md bg-success/15 px-2 py-0.5 text-[11px] font-medium text-success"
 								>+{boost}</span
 							>
 						{/each}
-						{#each selectedAncestry?.data.flaws ?? [] as flaw (flaw)}
+						{#each selectedAncestry?.data.flaws ?? [] as flaw, index (index)}
 							<span
 								class="my-auto rounded-md bg-danger/15 px-2 py-0.5 text-[11px] font-medium text-danger"
 								>-{flaw}</span
