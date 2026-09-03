@@ -6,6 +6,7 @@ const ancestriesUrl =
 type FoundryAncestry = {
 	_id: string;
 	name: string;
+	img: string;
 	system: {
 		additionalLanguages?: { value?: string[] };
 		boosts?: Record<string, { value?: string[] }>;
@@ -82,6 +83,7 @@ async function loadAncestries(): Promise<FoundryAncestry[]> {
 function createEntry(
 	ancestry: {
 		name: string;
+		img: string;
 		description?: string;
 		boosts?: string[];
 		flaws?: string[];
@@ -105,6 +107,7 @@ function createEntry(
 		enabled: 1,
 		slug: slugify(ancestry.name),
 		name: ancestry.name,
+		image: ancestry.img ?? null,
 		description: ancestry.description ?? null,
 		level: null,
 		rarity: ancestry.rarity ?? null,
@@ -125,13 +128,19 @@ function createEntry(
 
 function normalizeFoundryAncestry(ancestry: FoundryAncestry) {
 	const values = (field: Record<string, { value?: string[] }> | undefined) =>
-		Object.values(field ?? {}).flatMap((entry) => entry.value ?? []);
+		Object.values(field ?? {})
+			.map(({ value }) => (value && value.length > 1 ? 'FREE' : value?.[0]?.toUpperCase()))
+			.filter((v): v is string => !!v);
 
 	return {
 		name: ancestry.name,
+		img: ancestry.img.replaceAll(
+			'systems/pf2e/icons/ancestries/',
+			'https://raw.githubusercontent.com/foundryvtt/pf2e/refs/heads/v14-dev/static/icons/ancestries/'
+		),
 		description: ancestry.system.description?.value,
-		boosts: values(ancestry.system.boosts).map((value) => value.toUpperCase()),
-		flaws: values(ancestry.system.flaws).map((value) => value.toUpperCase()),
+		boosts: [...values(ancestry.system.boosts)],
+		flaws: values(ancestry.system.flaws),
 		hp: ancestry.system.hp,
 		hands: ancestry.system.hands,
 		languages: ancestry.system.languages?.value,
@@ -148,6 +157,7 @@ function normalizeFoundryAncestry(ancestry: FoundryAncestry) {
 async function seed() {
 	console.log('🌱 Seeding database...');
 
+	console.log('\n🧬 Seeding ancestries...');
 	await db
 		.insertInto('catalog_source')
 		.values(Object.values(sources))
@@ -187,13 +197,12 @@ async function seed() {
 				level: (eb) => eb.ref('excluded.level'),
 				rarity: (eb) => eb.ref('excluded.rarity'),
 				traits: (eb) => eb.ref('excluded.traits'),
-				data: (eb) => eb.ref('excluded.data')
+				data: (eb) => eb.ref('excluded.data'),
+				image: (eb) => eb.ref('excluded.image')
 			})
 		)
 		.execute();
-
-	console.log('\n🧬 Seeding ancestries...');
-	console.log(`🧬 Seeded ${entries.length} ancestries!`);
+	console.log(`🧬 Seeded ${entries.length} ancestries!\n`);
 
 	console.log('✅ Seed completed!');
 

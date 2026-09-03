@@ -25,6 +25,7 @@ export interface CatalogEntry {
 	description: string | null;
 	enabled: Generated<number>;
 	id: string;
+	image: string;
 	level: number | null;
 	name: string;
 	rarity: string | null;

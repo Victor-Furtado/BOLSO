@@ -13,6 +13,7 @@ export async function up(database: typeof db): Promise<void> {
 		.addColumn('enabled', 'integer', (col) => col.notNull().defaultTo(1))
 		.addColumn('slug', 'text', (col) => col.notNull())
 		.addColumn('name', 'text', (col) => col.notNull())
+		.addColumn('image', 'text', (col) => col.notNull())
 		.addColumn('description', 'text')
 		.addColumn('level', 'integer')
 		.addColumn('rarity', 'text')
