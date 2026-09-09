@@ -60,6 +60,24 @@ export async function findMany(filters: {
 	return await query.execute();
 }
 
+export async function findGrantedFeatsBySourceIds(
+	sourceEntryIds: string[]
+): Promise<Array<Entry & { source_entry_id: string }>> {
+	if (sourceEntryIds.length === 0) return [];
+
+	return await db
+		.selectFrom('catalog_relation')
+		.innerJoin('catalog_entry', 'catalog_entry.id', 'catalog_relation.target_entry_id')
+		.selectAll('catalog_entry')
+		.select('catalog_relation.source_entry_id')
+		.where('catalog_relation.type', '=', 'grants')
+		.where('catalog_relation.source_entry_id', 'in', sourceEntryIds)
+		.where('catalog_entry.type', '=', 'feat')
+		.where('catalog_entry.enabled', '=', 1)
+		.orderBy('catalog_entry.name')
+		.execute();
+}
+
 export async function create(entry: Insertable<CatalogEntry>) {
 	return await db
 		.insertInto('catalog_entry')

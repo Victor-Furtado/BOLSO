@@ -17,11 +17,23 @@ export const AncestryDataSchema = z.object({
 
 export type AncestryData = z.infer<typeof AncestryDataSchema>;
 
+export const HeritageDataSchema = z.object({
+	versatile: z.boolean()
+});
+
+export type HeritageData = z.infer<typeof HeritageDataSchema>;
+
 export const FeatDataSchema = z.object({
 	actions: z.number().int().min(0).max(3).nullable(),
 	actionType: z.enum(['single', 'two_actions', 'three_actions', 'free', 'reaction', 'passive']),
 	frequency: z.string().nullable()
 });
+
+export type FeatData = z.infer<typeof FeatDataSchema>;
+
+export const ActionDataSchema = FeatDataSchema;
+
+export type ActionData = FeatData;
 
 export const WeaponDataSchema = z.object({
 	damage: z.string(),
@@ -51,8 +63,16 @@ export const CatalogEntrySchema = z.discriminatedUnion('type', [
 		data: AncestryDataSchema
 	}),
 	z.object({
+		type: z.literal('heritage'),
+		data: HeritageDataSchema
+	}),
+	z.object({
 		type: z.literal('feat'),
 		data: FeatDataSchema
+	}),
+	z.object({
+		type: z.literal('action'),
+		data: ActionDataSchema
 	}),
 	z.object({
 		type: z.literal('weapon'),
