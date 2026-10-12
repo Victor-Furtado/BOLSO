@@ -1,0 +1,75 @@
+{
+	"name": "rpg-bolso",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "husky && (svelte-kit sync || true)",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check . && eslint . --cache",
+		"lint:fix": "eslint . --fix",
+		"format": "prettier --write .",
+		"migrate": "tsx scripts/migrate.ts",
+		"migrate:down": "tsx scripts/migrate-down.ts",
+		"migrate:new": "tsx scripts/create-migration.ts",
+		"db:seed": "tsx scripts/seed.ts",
+		"db:codegen": "tsx scripts/codegen.ts"
+	},
+	"lint-staged": {
+		"*.{js,ts,svelte,svx}": [
+			"eslint --fix --cache",
+			"prettier --write"
+		],
+		"*.{json,css,md,html}": [
+			"prettier --write"
+		]
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^21.2.0",
+		"@commitlint/config-conventional": "^21.2.0",
+		"@eslint/compat": "^2.0.1",
+		"@eslint/js": "^10.0.0",
+		"@sveltejs/adapter-auto": "^7.0.0",
+		"@sveltejs/kit": "^2.70.3",
+		"@sveltejs/vite-plugin-svelte": "^7.0.0",
+		"@tailwindcss/forms": "^0.5.11",
+		"@tailwindcss/typography": "^0.5.19",
+		"@tailwindcss/vite": "^4.1.18",
+		"@types/node": "^26.4.1",
+		"clsx": "^2.1.1",
+		"dotenv": "^17.4.2",
+		"eslint": "^10.0.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.14.0",
+		"globals": "^17.1.0",
+		"husky": "^9.1.7",
+		"kysely-codegen": "^0.20.0",
+		"lint-staged": "^17.0.0",
+		"mdsvex": "^0.12.6",
+		"prettier": "^3.8.1",
+		"prettier-plugin-svelte": "^4.0.0",
+		"prettier-plugin-tailwindcss": "^0.8.0",
+		"svelte": "^5.48.2",
+		"svelte-check": "^4.3.5",
+		"tailwind-merge": "^3.6.0",
+		"tailwindcss": "^4.1.18",
+		"tsx": "^4.23.12",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.53.1",
+		"vite": "^8.0.0"
+	},
+	"dependencies": {
+		"@fontsource-variable/eczar": "^5.3.0",
+		"@fontsource/alegreya-sans": "^5.3.0",
+		"@fontsource/cinzel-decorative": "^5.3.0",
+		"@libsql/kysely-libsql": "^0.4.1",
+		"bits-ui": "^2.18.1",
+		"kysely": "^0.29.5",
+		"lucide-svelte": "^1.0.1",
+		"zod": "^4.4.3"
+	}
+}

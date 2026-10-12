@@ -1,0 +1,78 @@
+@theme {
+	/* Brand and action colors: Pathfinder crimson */
+	--color-primary-50: #fdf3f3;
+	--color-primary-100: #fbe4e4;
+	--color-primary-200: #f6c9c9;
+	--color-primary-300: #eea3a3;
+	--color-primary-400: #e06d6d;
+	--color-primary-500: #c73c3c;
+	--color-primary-600: #a82424;
+	--color-primary-700: #8a1515;
+	--color-primary-800: #700a0a;
+	--color-primary-900: #5e0000;
+	--color-primary-950: #3a0000;
+	--color-primary: #a82424;
+	--color-primary-foreground: #fff8ec;
+
+	/* Parchment gold */
+	--color-gold-50: #fcf8ee;
+	--color-gold-100: #f6eed6;
+	--color-gold-200: #e9d7a1;
+	--color-gold-300: #dcc07a;
+	--color-gold-400: #cfa955;
+	--color-gold-500: #b88d3a;
+	--color-gold-600: #956f2c;
+	--color-gold-700: #725424;
+	--color-gold-800: #4f3a1b;
+	--color-gold-900: #2f2312;
+
+	--color-secondary: #232c7d;
+	--color-secondary-foreground: #e6e9ff;
+	--color-accent: #e9d7a1;
+	--color-accent-foreground: #2a1d0e;
+
+	/* Application canvas, surfaces, text, and controls */
+	--color-background: #120d0b;
+	--color-foreground: #f3ead8;
+	--color-surface: #1b1411;
+	--color-surface-raised: #241b17;
+	--color-surface-hover: #2e231e;
+	--color-surface-overlay: #382b24;
+	--color-muted: #261d18;
+	--color-muted-foreground: #b8a993;
+	--color-subtle-foreground: #857565;
+	--color-border: #3d3029;
+	--color-border-strong: #5a4639;
+	--color-input: #1f1714;
+	--color-ring: #cfa955;
+
+	/* Feedback colors */
+	--color-success: #4f9d74;
+	--color-success-foreground: #0b2117;
+	--color-warning: #d9a441;
+	--color-warning-foreground: #2e1d05;
+	--color-danger: #dc4b4b;
+	--color-danger-foreground: #2b0606;
+	--color-info: #6474d8;
+	--color-info-foreground: #0c1033;
+
+	/* Rarity tags (light text on top) */
+	--color-rarity-common: #4a4440;
+	--color-rarity-uncommon: #98513d;
+	--color-rarity-rare: #1d3f8a;
+	--color-rarity-unique: #6a2489;
+
+	/* Proficiency ranks (light text on top) */
+	--color-proficiency-untrained: #4a4440;
+	--color-proficiency-trained: #2a348f;
+	--color-proficiency-expert: #5a1a85;
+	--color-proficiency-master: #8a5c10;
+	--color-proficiency-legendary: #a82424;
+
+	/* Data visualization sequence */
+	--color-chart-1: #c73c3c;
+	--color-chart-2: #cfa955;
+	--color-chart-3: #6474d8;
+	--color-chart-4: #4f9d74;
+	--color-chart-5: #9b5fc0;
+}

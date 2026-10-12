@@ -1,0 +1,75 @@
+@theme {
+	--animate-page-in: page-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+	--animate-dice-roll: dice-roll 520ms cubic-bezier(0.3, 1.4, 0.5, 1);
+	--animate-fade-in: fade-in 200ms ease-out both;
+	--animate-fade-out: fade-out 160ms ease-in both;
+	--animate-sheet-in: sheet-in 320ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+	--animate-sheet-out: sheet-out 200ms ease-in both;
+	--animate-dialog-in: dialog-in 260ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+	--animate-dialog-out: dialog-out 160ms ease-in both;
+	--animate-popover-in: popover-in 180ms cubic-bezier(0.2, 0.9, 0.2, 1) both;
+	--animate-popover-out: dialog-out 120ms ease-in both;
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+	}
+	@keyframes fade-out {
+		to {
+			opacity: 0;
+		}
+	}
+	@keyframes sheet-in {
+		from {
+			transform: translateY(100%);
+		}
+	}
+	@keyframes sheet-out {
+		to {
+			transform: translateY(100%);
+		}
+	}
+	@keyframes dialog-in {
+		from {
+			opacity: 0;
+			transform: translateY(0.75rem) scale(0.97);
+		}
+	}
+	@keyframes dialog-out {
+		to {
+			opacity: 0;
+			transform: scale(0.97);
+		}
+	}
+
+	@keyframes popover-in {
+		from {
+			opacity: 0;
+			transform: scale(0.96);
+		}
+	}
+
+	@keyframes dice-roll {
+		0% {
+			transform: rotate(0deg) scale(1);
+		}
+		40% {
+			transform: rotate(200deg) scale(1.25);
+		}
+		100% {
+			transform: rotate(360deg) scale(1);
+		}
+	}
+
+	@keyframes page-in {
+		from {
+			opacity: 0;
+			transform: translateY(0.5rem);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+}
