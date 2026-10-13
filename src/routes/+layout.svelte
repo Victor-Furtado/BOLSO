@@ -15,11 +15,13 @@
 
 	let { data, children } = $props();
 
-	const navItems = $derived([
-		{ href: resolve('/'), label: 'Home', icon: House },
-		{ href: resolve('/char-gen'), label: 'Criador de Personagens', icon: ScrollText },
-		...(data.account ? [] : [{ href: resolve('/login'), label: 'Entrar', icon: LogIn }])
-	]);
+	const navItems = $derived(
+		[
+			{ href: resolve('/'), label: 'Home', icon: House, min: 0 },
+			{ href: resolve('/char-gen'), label: 'Criador de Personagens', icon: ScrollText, min: 2 },
+			...(data.account ? [] : [{ href: resolve('/login'), label: 'Entrar', icon: LogIn, min: 0 }])
+		].filter((item) => data.access >= item.min)
+	);
 
 	let menuOpen = $state(false);
 

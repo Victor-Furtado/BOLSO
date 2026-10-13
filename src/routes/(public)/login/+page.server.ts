@@ -42,7 +42,7 @@ export const actions: Actions = {
 		}
 
 		await openSession(account.id, cookies, remember);
-		redirect(303, '/char-gen');
+		redirect(303, '/');
 	},
 	logout: async ({ cookies }) => {
 		await revokeSession(cookies);
