@@ -7,7 +7,15 @@ const envSchema = z.object({
 		(value) => (value === '' ? undefined : value),
 		z.string().min(1).optional()
 	),
-	JWT_SECRET: z.string().min(32)
+	JWT_SECRET: z.string().min(32),
+	AWS_REGION: z.preprocess(
+		(value) => (value === '' || value === undefined ? 'us-east-1' : value),
+		z.string().min(1)
+	),
+	SES_FROM_EMAIL: z.preprocess(
+		(value) => (value === '' ? undefined : value),
+		z.string().email().optional()
+	)
 });
 
 type EnvInput = z.infer<typeof envSchema>;
