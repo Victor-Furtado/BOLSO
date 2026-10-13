@@ -5,6 +5,7 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			account: { id: string; email: string; admin: boolean } | null;
+			role: 'player' | 'gm' | null;
 		}
 		// interface PageData {}
 		// interface PageState {}

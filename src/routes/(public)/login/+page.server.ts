@@ -3,10 +3,11 @@ import { sql } from 'kysely';
 import { hashPassword, verifyPassword } from '$lib/server/auth/crypto';
 import { openSession, revokeSession } from '$lib/server/auth/session';
 import { db } from '$lib/server/db/client';
+import { actorRank } from '$lib/server/auth/access';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = ({ locals }) => {
-	if (locals.account) redirect(303, '/char-gen');
+	if (actorRank(locals.account, locals.role) >= 2) redirect(303, '/');
 	return {};
 };
 
