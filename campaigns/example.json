@@ -1,0 +1,12 @@
+{
+	"slug": "example",
+	"name": "Example table",
+	"levelMin": 1,
+	"levelMax": 10,
+	"maxRarity": "common",
+	"sources": [],
+	"ancestries": ["human"],
+	"heritages": ["versatile-human"],
+	"backgrounds": ["warrior"],
+	"classes": ["fighter"]
+}

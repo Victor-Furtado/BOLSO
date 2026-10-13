@@ -17,6 +17,7 @@
 		"migrate:down": "tsx scripts/migrate-down.ts",
 		"migrate:new": "tsx scripts/create-migration.ts",
 		"db:seed": "tsx scripts/seed.ts",
+		"campaign:setup": "tsx scripts/campaign-setup.ts",
 		"db:codegen": "tsx scripts/codegen.ts"
 	},
 	"lint-staged": {

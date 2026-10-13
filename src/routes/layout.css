@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+@import '../lib/styles/colors.css';
+@import '../lib/styles/fonts.css';
+@import '../lib/styles/animations.css';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@source not '../../.foundry';
+
+@layer base {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply font-heading;
+	}
+}
