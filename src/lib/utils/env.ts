@@ -6,7 +6,8 @@ const envSchema = z.object({
 	TURSO_CATALOG_AUTH_TOKEN: z.preprocess(
 		(value) => (value === '' ? undefined : value),
 		z.string().min(1).optional()
-	)
+	),
+	JWT_SECRET: z.string().min(32)
 });
 
 type EnvInput = z.infer<typeof envSchema>;

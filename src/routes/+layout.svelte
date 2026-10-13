@@ -11,15 +11,15 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import logo from '$lib/assets/logo.svg';
 	import { cn } from '$lib/utils/ui';
-	import { House, LogIn, Menu, ScrollText, X } from 'lucide-svelte';
+	import { House, LogIn, LogOut, Menu, ScrollText, X } from 'lucide-svelte';
 
-	let { children } = $props();
+	let { data, children } = $props();
 
-	const navItems = [
+	const navItems = $derived([
 		{ href: resolve('/'), label: 'Home', icon: House },
 		{ href: resolve('/char-gen'), label: 'Criador de Personagens', icon: ScrollText },
-		{ href: resolve('/login'), label: 'Entrar', icon: LogIn }
-	];
+		...(data.account ? [] : [{ href: resolve('/login'), label: 'Entrar', icon: LogIn }])
+	]);
 
 	let menuOpen = $state(false);
 
@@ -71,6 +71,19 @@
 							</a>
 						</li>
 					{/each}
+					{#if data.account}
+						<li>
+							<form method="POST" action="{resolve('/login')}?/logout">
+								<button
+									type="submit"
+									class="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors outline-none hover:bg-surface-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+								>
+									<LogOut class="size-4" aria-hidden="true" />
+									Sair
+								</button>
+							</form>
+						</li>
+					{/if}
 				</ul>
 			</nav>
 
@@ -108,6 +121,19 @@
 							</a>
 						</li>
 					{/each}
+					{#if data.account}
+						<li>
+							<form method="POST" action="{resolve('/login')}?/logout">
+								<button
+									type="submit"
+									class="flex w-full items-center gap-3 rounded-md px-3 py-3 text-base font-medium text-muted-foreground transition-colors outline-none hover:bg-surface-hover hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+								>
+									<LogOut class="size-5" aria-hidden="true" />
+									Sair
+								</button>
+							</form>
+						</li>
+					{/if}
 				</ul>
 			</nav>
 		{/if}

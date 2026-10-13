@@ -1,21 +1,15 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { enhance } from '$app/forms';
 	import AuthCard, { linkClass, submitButtonClass } from '$lib/components/auth/auth-card.svelte';
 	import PasswordInput from '$lib/components/auth/password-input.svelte';
 	import FormField, { inputClass } from '$lib/components/ui/form-field.svelte';
-	import { Info, LogIn } from 'lucide-svelte';
+	import { CircleAlert, LogIn } from 'lucide-svelte';
+
+	let { form } = $props();
 
 	const id = $props.id();
-
-	let email = $state('');
 	let password = $state('');
-	let remember = $state(true);
-	let submitted = $state(false);
-
-	function handleSubmit(event: SubmitEvent) {
-		event.preventDefault();
-		submitted = true;
-	}
 </script>
 
 <svelte:head>
@@ -23,13 +17,13 @@
 </svelte:head>
 
 <AuthCard title="Bem-vindo de volta" description="Entre para continuar suas aventuras.">
-	<form method="POST" onsubmit={handleSubmit} class="flex flex-col gap-5">
+	<form method="POST" action="?/login" use:enhance class="flex flex-col gap-5">
 		<FormField id="{id}-email" label="E-mail">
 			<input
 				id="{id}-email"
 				name="email"
 				type="email"
-				bind:value={email}
+				value={form?.email ?? ''}
 				required
 				autocomplete="email"
 				inputmode="email"
@@ -44,7 +38,7 @@
 				name="password"
 				bind:value={password}
 				required
-				minlength={8}
+				minlength={1}
 				autocomplete="current-password"
 			/>
 		</FormField>
@@ -53,19 +47,19 @@
 			<input
 				type="checkbox"
 				name="remember"
-				bind:checked={remember}
+				checked
 				class="size-4 rounded border-border-strong bg-input text-primary-600 focus:ring-gold-500/40 focus:ring-offset-surface"
 			/>
 			Manter conectado
 		</label>
 
-		{#if submitted}
+		{#if form?.message}
 			<p
-				role="status"
-				class="flex items-start gap-2 rounded-md border border-info/40 bg-info/10 px-3 py-2.5 text-sm text-foreground"
+				role="alert"
+				class="flex items-start gap-2 rounded-md border border-danger/40 bg-danger/10 px-3 py-2.5 text-sm text-foreground"
 			>
-				<Info class="mt-0.5 size-4 shrink-0 text-info" aria-hidden="true" />
-				O login ainda não está disponível. Em breve você poderá entrar por aqui.
+				<CircleAlert class="mt-0.5 size-4 shrink-0 text-danger" aria-hidden="true" />
+				{form.message}
 			</p>
 		{/if}
 
