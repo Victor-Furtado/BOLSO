@@ -1,16 +1,16 @@
 import { randomUUID } from 'node:crypto';
-import { sql } from 'kysely';
 import type { Cookies } from '@sveltejs/kit';
 import { dev } from '$app/environment';
 import { db } from '$lib/server/db/client';
 import { getEnv } from '$lib/utils/env';
-import { readJwt, signJwt } from './crypto';
+import { hashRefreshSecret, newRefreshSecret, readJwt, signJwt } from './crypto';
 
 export const SESSION_COOKIE = 'bolso_session';
 export const REFRESH_COOKIE = 'bolso_refresh';
 
 const ACCESS_SECONDS = 15 * 60;
 const REFRESH_SECONDS = 30 * 24 * 60 * 60;
+const PASSWORD_MAX = 256;
 
 export type Account = {
 	id: string;
@@ -24,10 +24,15 @@ type SessionRow = {
 	family_id: string;
 	expires_at: string;
 	revoked_at: string | null;
+	persistent: number;
 	email: string;
 	admin: number;
 	disabled_at: string | null;
 };
+
+export function passwordAcceptable(password: string): boolean {
+	return password.length > 0 && password.length <= PASSWORD_MAX;
+}
 
 function cookieBase(maxAge?: number) {
 	return {
@@ -46,37 +51,66 @@ function accessToken(accountId: string, sessionId: string): string {
 	);
 }
 
+function refreshMaxAge(persistent: boolean): number | undefined {
+	return persistent ? REFRESH_SECONDS : undefined;
+}
+
+function sessionQuery() {
+	return db
+		.selectFrom('play_sessions as s')
+		.innerJoin('play_accounts as a', 'a.id', 's.account_id')
+		.select([
+			's.id',
+			's.account_id',
+			's.family_id',
+			's.expires_at',
+			's.revoked_at',
+			's.persistent',
+			'a.email',
+			'a.admin',
+			'a.disabled_at'
+		]);
+}
+
+async function insertSession(
+	accountId: string,
+	familyId: string,
+	expiresAt: string,
+	secret: string,
+	persistent: boolean
+): Promise<string> {
+	const id = randomUUID();
+	await db
+		.insertInto('play_sessions')
+		.values({
+			id,
+			account_id: accountId,
+			family_id: familyId,
+			expires_at: expiresAt,
+			token_hash: hashRefreshSecret(secret),
+			persistent: persistent ? 1 : 0,
+			created_at: new Date().toISOString()
+		})
+		.execute();
+	return id;
+}
+
 export async function openSession(
 	accountId: string,
 	cookies: Cookies,
 	remember: boolean
 ): Promise<void> {
-	const id = randomUUID();
+	const secret = newRefreshSecret();
 	const familyId = randomUUID();
 	const expiresAt = new Date(Date.now() + REFRESH_SECONDS * 1000).toISOString();
-	await sql`
-		insert into play_sessions (id, account_id, family_id, expires_at)
-		values (${id}, ${accountId}, ${familyId}, ${expiresAt})
-	`.execute(db);
-	const refreshMaxAge = remember ? REFRESH_SECONDS : undefined;
+	const id = await insertSession(accountId, familyId, expiresAt, secret, remember);
 	cookies.set(SESSION_COOKIE, accessToken(accountId, id), cookieBase(ACCESS_SECONDS));
-	cookies.set(REFRESH_COOKIE, id, cookieBase(refreshMaxAge));
+	cookies.set(REFRESH_COOKIE, secret, cookieBase(refreshMaxAge(remember)));
 }
 
 export function clearSessionCookies(cookies: Cookies): void {
 	cookies.delete(SESSION_COOKIE, { path: '/' });
 	cookies.delete(REFRESH_COOKIE, { path: '/' });
-}
-
-async function sessionById(id: string): Promise<SessionRow | undefined> {
-	const result = await sql<SessionRow>`
-		select s.id, s.account_id, s.family_id, s.expires_at, s.revoked_at,
-			a.email, a.admin, a.disabled_at
-		from play_sessions s
-		join play_accounts a on a.id = s.account_id
-		where s.id = ${id}
-	`.execute(db);
-	return result.rows[0];
 }
 
 function usable(row: SessionRow | undefined): row is SessionRow {
@@ -86,27 +120,31 @@ function usable(row: SessionRow | undefined): row is SessionRow {
 }
 
 async function revokeFamily(familyId: string): Promise<void> {
-	const now = new Date().toISOString();
-	await sql`
-		update play_sessions
-		set revoked_at = ${now}
-		where family_id = ${familyId} and revoked_at is null
-	`.execute(db);
+	await db
+		.updateTable('play_sessions')
+		.set({ revoked_at: new Date().toISOString() })
+		.where('family_id', '=', familyId)
+		.where('revoked_at', 'is', null)
+		.execute();
+}
+
+function accountOf(row: SessionRow): Account {
+	return { id: row.account_id, email: row.email, admin: row.admin === 1 };
 }
 
 export async function accountFromCookies(cookies: Cookies): Promise<Account | null> {
 	const access = cookies.get(SESSION_COOKIE);
 	const claims = access ? readJwt(access, getEnv().JWT_SECRET) : null;
 	if (claims) {
-		const row = await sessionById(claims.sid);
-		if (usable(row) && row.account_id === claims.sub) {
-			return { id: row.account_id, email: row.email, admin: row.admin === 1 };
-		}
+		const row = await sessionQuery().where('s.id', '=', claims.sid).executeTakeFirst();
+		if (usable(row) && row.account_id === claims.sub) return accountOf(row);
 	}
 
-	const refreshId = cookies.get(REFRESH_COOKIE);
-	if (!refreshId) return null;
-	const current = await sessionById(refreshId);
+	const refreshSecret = cookies.get(REFRESH_COOKIE);
+	if (!refreshSecret) return null;
+	const current = await sessionQuery()
+		.where('s.token_hash', '=', hashRefreshSecret(refreshSecret))
+		.executeTakeFirst();
 	if (!current) return null;
 	if (current.revoked_at) {
 		await revokeFamily(current.family_id);
@@ -118,23 +156,49 @@ export async function accountFromCookies(cookies: Cookies): Promise<Account | nu
 		return null;
 	}
 
-	const nextId = randomUUID();
-	const now = new Date().toISOString();
-	await sql`
-		insert into play_sessions (id, account_id, family_id, expires_at)
-		values (${nextId}, ${current.account_id}, ${current.family_id}, ${current.expires_at})
-	`.execute(db);
-	await sql`update play_sessions set revoked_at = ${now} where id = ${current.id}`.execute(db);
+	const claimed = await db
+		.updateTable('play_sessions')
+		.set({ revoked_at: new Date().toISOString() })
+		.where('id', '=', current.id)
+		.where('revoked_at', 'is', null)
+		.executeTakeFirst();
+	if (Number(claimed.numUpdatedRows) !== 1) {
+		const successor = await db
+			.selectFrom('play_sessions')
+			.select('id')
+			.where('family_id', '=', current.family_id)
+			.where('revoked_at', 'is', null)
+			.executeTakeFirst();
+		if (!successor) {
+			await revokeFamily(current.family_id);
+			clearSessionCookies(cookies);
+		}
+		return null;
+	}
+
+	const secret = newRefreshSecret();
+	const persistent = current.persistent === 1;
+	const nextId = await insertSession(
+		current.account_id,
+		current.family_id,
+		current.expires_at,
+		secret,
+		persistent
+	);
 	cookies.set(SESSION_COOKIE, accessToken(current.account_id, nextId), cookieBase(ACCESS_SECONDS));
-	cookies.set(REFRESH_COOKIE, nextId, cookieBase(REFRESH_SECONDS));
-	return { id: current.account_id, email: current.email, admin: current.admin === 1 };
+	cookies.set(REFRESH_COOKIE, secret, cookieBase(refreshMaxAge(persistent)));
+	return accountOf(current);
 }
 
 export async function revokeSession(cookies: Cookies): Promise<void> {
-	const refreshId = cookies.get(REFRESH_COOKIE);
-	if (refreshId) {
-		const now = new Date().toISOString();
-		await sql`update play_sessions set revoked_at = ${now} where id = ${refreshId}`.execute(db);
+	const refreshSecret = cookies.get(REFRESH_COOKIE);
+	if (refreshSecret) {
+		await db
+			.updateTable('play_sessions')
+			.set({ revoked_at: new Date().toISOString() })
+			.where('token_hash', '=', hashRefreshSecret(refreshSecret))
+			.where('revoked_at', 'is', null)
+			.execute();
 	}
 	clearSessionCookies(cookies);
 }

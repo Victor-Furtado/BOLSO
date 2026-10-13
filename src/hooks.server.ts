@@ -1,6 +1,5 @@
 import { error, redirect, type Handle } from '@sveltejs/kit';
-import { sql } from 'kysely';
-import { actorRank, routeRank, type MemberRole } from '$lib/server/auth/access';
+import { actorRank, adminRoute, routeRank, type MemberRole } from '$lib/server/auth/access';
 import { accountFromCookies } from '$lib/server/auth/session';
 import { db } from '$lib/server/db/client';
 
@@ -10,12 +9,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	let role: MemberRole | null = null;
 	if (account) {
-		const member = await sql<{ role: MemberRole }>`
-			select role from play_members where account_id = ${account.id}
-		`.execute(db);
-		role = member.rows[0]?.role ?? null;
+		const member = await db
+			.selectFrom('play_members')
+			.select('role')
+			.where('account_id', '=', account.id)
+			.executeTakeFirst();
+		role = member?.role === 'player' || member?.role === 'gm' ? member.role : null;
 	}
 	event.locals.role = role;
+
+	if (adminRoute(event.route.id)) {
+		if (!account) redirect(303, '/login');
+		if (!account.admin) error(403, 'Você não tem acesso a esta página.');
+	}
 
 	const required = routeRank(event.route.id);
 	const granted = actorRank(account, role);

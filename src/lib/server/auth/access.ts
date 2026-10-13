@@ -1,5 +1,5 @@
-/** Least access to most. A higher rank may open every group below it. */
-const GROUPS = ['(public)', '(private)', '(player)', '(gm)', '(admin)'] as const;
+/** Least access to most. A higher rank may open every group below it. Admin is not a rank. */
+const GROUPS = ['(public)', '(private)', '(player)', '(gm)'] as const;
 
 export type MemberRole = 'player' | 'gm';
 
@@ -12,9 +12,12 @@ export function routeRank(routeId: string | null): number {
 	return rank;
 }
 
+export function adminRoute(routeId: string | null): boolean {
+	return !!routeId?.includes('(admin)');
+}
+
 export function actorRank(account: { admin: boolean } | null, role: MemberRole | null): number {
 	if (!account) return 0;
-	if (account.admin) return 4;
 	if (role === 'gm') return 3;
 	if (role === 'player') return 2;
 	return 1;

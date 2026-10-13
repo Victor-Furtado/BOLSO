@@ -11,7 +11,8 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import logo from '$lib/assets/logo.svg';
 	import { cn } from '$lib/utils/ui';
-	import { House, LogIn, LogOut, Menu, ScrollText, X } from 'lucide-svelte';
+	import { Toaster } from 'svelte-sonner';
+	import { House, LogIn, LogOut, Menu, ScrollText, Users, X } from 'lucide-svelte';
 
 	let { data, children } = $props();
 
@@ -19,8 +20,9 @@
 		[
 			{ href: resolve('/'), label: 'Home', icon: House, min: 0 },
 			{ href: resolve('/char-gen'), label: 'Criador de Personagens', icon: ScrollText, min: 2 },
+			{ href: resolve('/usuarios'), label: 'Usuários', icon: Users, min: 0, admin: true },
 			...(data.account ? [] : [{ href: resolve('/login'), label: 'Entrar', icon: LogIn, min: 0 }])
-		].filter((item) => data.access >= item.min)
+		].filter((item) => data.access >= item.min && (!('admin' in item) || data.admin))
 	);
 
 	let menuOpen = $state(false);
@@ -159,4 +161,5 @@
 			</p>
 		</div>
 	</footer>
+	<Toaster theme="dark" richColors position="top-center" duration={4000} />
 </div>

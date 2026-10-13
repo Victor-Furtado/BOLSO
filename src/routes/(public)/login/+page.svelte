@@ -4,9 +4,14 @@
 	import AuthCard, { linkClass, submitButtonClass } from '$lib/components/auth/auth-card.svelte';
 	import PasswordInput from '$lib/components/auth/password-input.svelte';
 	import FormField, { inputClass } from '$lib/components/ui/form-field.svelte';
-	import { CircleAlert, LogIn } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
+	import { LogIn } from 'lucide-svelte';
 
 	let { form } = $props();
+
+	$effect(() => {
+		if (form?.message) toast.error(form.message);
+	});
 
 	const id = $props.id();
 	let password = $state('');
@@ -52,16 +57,6 @@
 			/>
 			Manter conectado
 		</label>
-
-		{#if form?.message}
-			<p
-				role="alert"
-				class="flex items-start gap-2 rounded-md border border-danger/40 bg-danger/10 px-3 py-2.5 text-sm text-foreground"
-			>
-				<CircleAlert class="mt-0.5 size-4 shrink-0 text-danger" aria-hidden="true" />
-				{form.message}
-			</p>
-		{/if}
 
 		<button type="submit" class={submitButtonClass}>
 			<LogIn class="size-4" aria-hidden="true" />

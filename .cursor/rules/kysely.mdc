@@ -1,0 +1,28 @@
+---
+description: Query the database with the Kysely builder, not raw SQL
+alwaysApply: false
+---
+# Kysely queries
+
+Use the typed builder on `db` from `$lib/server/db/client` (scripts use `scripts/db.ts`). Do not import `sql` for reads or writes.
+
+```typescript
+const account = await db
+	.selectFrom('play_accounts')
+	.select(['id', 'password_hash', 'disabled_at'])
+	.where('email', '=', email)
+	.executeTakeFirst();
+
+await db
+	.updateTable('play_sessions')
+	.set({ revoked_at: new Date().toISOString() })
+	.where('id', '=', id)
+	.where('revoked_at', 'is', null)
+	.execute();
+```
+
+- One row: `executeTakeFirst()`. Lists: `execute()`.
+- Inserts and updates pass column values as objects. Use `onConflict` for upserts.
+- Joins alias tables (`play_sessions as s`) and select qualified columns.
+- Table and column names come from `src/lib/server/db/types.d.ts`. That file is generated. After a migration, run `db:codegen`. Do not hand-edit it.
+- Migrations use `database.schema`. `sql` stays for pragmas, check expressions, and `modifyEnd`. Data changes in a migration still use the builder (`deleteFrom`, `updateTable`) with `database as Kysely<DB>` when the runner types the database as `unknown`.

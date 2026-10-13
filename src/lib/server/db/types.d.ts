@@ -10,4 +10,44 @@ export type Generated<T> =
 		? ColumnType<S, I | undefined, U>
 		: ColumnType<T, T | undefined, T>;
 
-export interface DB {}
+export interface PlayAccounts {
+	id: string;
+	email: string;
+	password_hash: string;
+	admin: Generated<number>;
+	disabled_at: string | null;
+}
+
+export interface PlaySessions {
+	id: string;
+	account_id: string;
+	family_id: string;
+	expires_at: string;
+	revoked_at: string | null;
+	token_hash: string;
+	persistent: Generated<number>;
+	created_at: string;
+}
+
+export interface PlayMembers {
+	account_id: string;
+	campaign_id: string;
+	role: string;
+	manager: Generated<number>;
+}
+
+export interface PlayCampaigns {
+	id: string;
+	slug: string;
+	name: string;
+	level_min: Generated<number>;
+	level_max: Generated<number>;
+	max_rarity: Generated<string>;
+}
+
+export interface DB {
+	play_accounts: PlayAccounts;
+	play_sessions: PlaySessions;
+	play_members: PlayMembers;
+	play_campaigns: PlayCampaigns;
+}

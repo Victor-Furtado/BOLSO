@@ -1,5 +1,4 @@
 import { randomUUID } from 'node:crypto';
-import { sql } from 'kysely';
 import { hashPassword } from '../src/lib/server/auth/crypto.ts';
 import { db } from './db.ts';
 
@@ -7,36 +6,41 @@ const email = 'victor@bolso.com';
 const password = 'zxc123';
 
 async function seedAdmin(): Promise<void> {
-	const campaign = await sql<{ id: string }>`
-		select id from play_campaigns where slug = 'bolso'
-	`.execute(db);
-	const campaignId = campaign.rows[0]?.id;
-	if (!campaignId) throw new Error('Bolso campaign is missing. Run campaign:setup first.');
+	const campaign = await db
+		.selectFrom('play_campaigns')
+		.select('id')
+		.where('slug', '=', 'bolso')
+		.executeTakeFirst();
+	if (!campaign) throw new Error('Bolso campaign is missing. Run campaign:setup first.');
 
-	const existing = await sql<{ id: string }>`
-		select id from play_accounts where email = ${email}
-	`.execute(db);
-	const id = existing.rows[0]?.id ?? randomUUID();
-	const passwordHash = hashPassword(password);
+	const existing = await db
+		.selectFrom('play_accounts')
+		.select('id')
+		.where('email', '=', email)
+		.executeTakeFirst();
+	const id = existing?.id ?? randomUUID();
+	const passwordHash = await hashPassword(password);
 
-	if (existing.rows[0]) {
-		await sql`
-			update play_accounts
-			set password_hash = ${passwordHash}, admin = 1, disabled_at = null
-			where id = ${id}
-		`.execute(db);
+	if (existing) {
+		await db
+			.updateTable('play_accounts')
+			.set({ password_hash: passwordHash, admin: 1, disabled_at: null })
+			.where('id', '=', id)
+			.execute();
 	} else {
-		await sql`
-			insert into play_accounts (id, email, password_hash, admin)
-			values (${id}, ${email}, ${passwordHash}, 1)
-		`.execute(db);
+		await db
+			.insertInto('play_accounts')
+			.values({ id, email, password_hash: passwordHash, admin: 1 })
+			.execute();
 	}
 
-	await sql`
-		insert into play_members (account_id, campaign_id, role, manager)
-		values (${id}, ${campaignId}, 'gm', 0)
-		on conflict (account_id) do update set role = 'gm', campaign_id = ${campaignId}
-	`.execute(db);
+	await db
+		.insertInto('play_members')
+		.values({ account_id: id, campaign_id: campaign.id, role: 'gm', manager: 0 })
+		.onConflict((conflict) =>
+			conflict.column('account_id').doUpdateSet({ role: 'gm', campaign_id: campaign.id })
+		)
+		.execute();
 
 	console.log(`✓ admin ${email}`);
 	await db.destroy();
