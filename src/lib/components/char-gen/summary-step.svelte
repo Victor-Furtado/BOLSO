@@ -10,7 +10,9 @@
 	} from '$lib/char-gen/build';
 	import { proficiencyLabels, type ProficiencyRank } from '$lib/char-gen/class';
 	import { featCategoryLabels, type FeatOption } from '$lib/char-gen/feat';
+	import { enhance } from '$app/forms';
 	import { characterFileName, toCharacterExport } from '$lib/char-gen/export';
+	import SubmitButton from '$lib/components/ui/submit-button.svelte';
 	import {
 		ancestrySizeMap,
 		ancestryVisionMap,
@@ -23,6 +25,7 @@
 	import {
 		CircleAlert,
 		Download,
+		Save,
 		Eye,
 		Footprints,
 		Heart,
@@ -42,10 +45,12 @@
 		selections: Selections;
 		feats: FeatOption[];
 		touches: FinalTouches;
+		atLimit: boolean;
 		ongoto: (tab: TabTarget) => void;
 	};
 
-	let { basicInfo, selections, feats, touches, ongoto }: Props = $props();
+	let { basicInfo, selections, feats, touches, atLimit, ongoto }: Props = $props();
+	let saving = $state(false);
 
 	const id = $props.id();
 
@@ -254,14 +259,46 @@
 				</p>
 			{/if}
 		</div>
-		<button
-			type="button"
-			onclick={downloadJson}
-			class="relative inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-md border border-border-strong bg-surface/80 px-3 py-2 text-sm font-medium text-foreground transition-colors outline-none hover:bg-surface-hover focus-visible:ring-2 focus-visible:ring-ring sm:ml-auto sm:self-center"
-		>
-			<Download class="size-4" aria-hidden="true" />
-			Exportar JSON
-		</button>
+		<div class="relative flex shrink-0 flex-col gap-2 sm:ml-auto sm:flex-row sm:self-center">
+			<form
+				method="POST"
+				action="?/save"
+				use:enhance={() => {
+					saving = true;
+					return async ({ update }) => {
+						try {
+							await update();
+						} finally {
+							saving = false;
+						}
+					};
+				}}
+			>
+				<input
+					type="hidden"
+					name="sheet"
+					value={JSON.stringify(toCharacterExport(basicInfo, selections, build))}
+				/>
+				<input type="hidden" name="portrait" value={basicInfo.portrait?.dataUrl ?? ''} />
+				<fieldset disabled={saving || pending.length > 0 || atLimit} class="m-0 border-0 p-0">
+					<SubmitButton
+						pending={saving}
+						class="relative inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-md border border-gold-600/60 bg-primary-700 px-3 py-2 text-sm font-medium text-primary-foreground transition-colors outline-none hover:bg-primary-600 focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50 sm:self-center"
+					>
+						<Save class="size-4" aria-hidden="true" />
+						Salvar personagem
+					</SubmitButton>
+				</fieldset>
+			</form>
+			<button
+				type="button"
+				onclick={downloadJson}
+				class="relative inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-md border border-border-strong bg-surface/80 px-3 py-2 text-sm font-medium text-foreground transition-colors outline-none hover:bg-surface-hover focus-visible:ring-2 focus-visible:ring-ring sm:self-center"
+			>
+				<Download class="size-4" aria-hidden="true" />
+				Exportar JSON
+			</button>
+		</div>
 	</header>
 
 	<div class="grid gap-8 lg:grid-cols-[18rem_minmax(0,1fr)]">

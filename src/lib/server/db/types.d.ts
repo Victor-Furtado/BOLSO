@@ -40,6 +40,19 @@ export interface PlayMembers {
 	manager: Generated<number>;
 }
 
+export interface PlayCharacters {
+	id: string;
+	account_id: string;
+	campaign_id: string;
+	name: string;
+	ancestry_slug: string | null;
+	class_slug: string | null;
+	status: Generated<string>;
+	sheet: string;
+	portrait: string | null;
+	created_at: string;
+}
+
 export interface PlayCampaigns {
 	id: string;
 	slug: string;
@@ -54,4 +67,5 @@ export interface DB {
 	play_sessions: PlaySessions;
 	play_members: PlayMembers;
 	play_campaigns: PlayCampaigns;
+	play_characters: PlayCharacters;
 }

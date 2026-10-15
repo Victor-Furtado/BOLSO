@@ -16,9 +16,15 @@
 	import FinalTouchesStep from '$lib/components/char-gen/final-touches-step.svelte';
 	import SummaryStep from '$lib/components/char-gen/summary-step.svelte';
 	import Ornament from '$lib/components/ui/ornament.svelte';
+	import { toast } from 'svelte-sonner';
 	import { CircleAlert, RotateCcw } from 'lucide-svelte';
 
-	let { data } = $props();
+	let { data, form } = $props();
+
+	$effect(() => {
+		if (form?.message) toast.error(form.message);
+		if (form?.saved) toast.success(`${form.saved} entrou na lista.`);
+	});
 
 	const tabs = [
 		{
@@ -121,24 +127,6 @@
 <svelte:head>
 	<title>Criar Personagem · Bolso</title>
 </svelte:head>
-
-{#if data.campaign}
-	<p class="mb-4 px-2 text-sm text-muted-foreground sm:px-5">
-		Mesa <span class="font-medium text-gold-100">{data.campaign.name}</span>
-		· níveis {data.campaign.levelMin}–{data.campaign.levelMax}
-	</p>
-{:else}
-	<div
-		role="status"
-		class="mb-4 flex flex-col gap-1 rounded-lg border border-border-strong bg-surface-raised px-4 py-3 text-sm sm:mx-5"
-	>
-		<p class="font-medium text-gold-100">Nenhuma mesa carregada</p>
-		<p class="text-muted-foreground">
-			Crie uma com <code class="text-foreground">npm run campaign:setup</code>. Se houver mais de
-			uma, abra esta página com <code class="text-foreground">?campaign=slug</code>.
-		</p>
-	</div>
-{/if}
 
 <Tabs.Root bind:value={activeTab} bind:ref={tabsRoot} class="w-full scroll-mt-20">
 	<Tabs.List
@@ -275,6 +263,7 @@
 									{selections}
 									feats={loaded.feats}
 									touches={finalTouches}
+									atLimit={data.characters.length >= data.aliveLimit}
 									ongoto={goToTab}
 								/>
 							{/if}
