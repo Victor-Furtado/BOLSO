@@ -1,7 +1,3 @@
-import type { AncestryCatalog } from '$lib/char-gen/ancestry';
-import type { BackgroundCatalog } from '$lib/char-gen/background';
-import type { ClassCatalog } from '$lib/char-gen/class';
-
 export const campaignConfig = {
 	ancestries: ['awakened-animal', 'leshy', 'elf', 'gnome', 'dwarf', 'human'],
 	heritages: [

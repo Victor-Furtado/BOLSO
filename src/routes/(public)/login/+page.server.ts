@@ -1,6 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { hashPassword, verifyPassword } from '$lib/server/auth/crypto';
 import { openSession, passwordAcceptable, revokeSession } from '$lib/server/auth/session';
+import { isTempPassword } from '$lib/server/auth/temp-password';
 import { db } from '$lib/server/db/client';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -23,6 +24,7 @@ function noteFailure(key: string): void {
 }
 
 export const load: PageServerLoad = ({ locals }) => {
+	if (locals.account?.needAction === 'password_change') redirect(303, '/senha');
 	if (locals.account) redirect(303, '/');
 	return {};
 };
@@ -50,7 +52,7 @@ export const actions: Actions = {
 
 		const account = await db
 			.selectFrom('play_accounts')
-			.select(['id', 'password_hash', 'disabled_at'])
+			.select(['id', 'password_hash', 'disabled_at', 'need_action'])
 			.where('email', '=', email)
 			.executeTakeFirst();
 		const valid = account
@@ -61,8 +63,17 @@ export const actions: Actions = {
 			return fail(400, { message: 'E-mail ou senha incorretos.', email });
 		}
 
+		const mustChange = account.need_action === 'password_change' || isTempPassword(password);
+		if (mustChange && account.need_action !== 'password_change') {
+			await db
+				.updateTable('play_accounts')
+				.set({ need_action: 'password_change' })
+				.where('id', '=', account.id)
+				.execute();
+		}
+
 		await openSession(account.id, cookies, remember);
-		redirect(303, '/');
+		redirect(303, mustChange ? '/senha' : '/');
 	},
 	logout: async ({ cookies }) => {
 		await revokeSession(cookies);

@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
+	import { Dialog } from 'bits-ui';
 	import { fade, fly } from 'svelte/transition';
 	import { inputClass } from '$lib/components/ui/form-field.svelte';
+	import SubmitButton from '$lib/components/ui/submit-button.svelte';
 	import { cn } from '$lib/utils/ui';
 	import { toast } from 'svelte-sonner';
 	import { ChevronLeft, ChevronRight, Pencil, Plus, Search, Trash2, X } from 'lucide-svelte';
@@ -13,6 +16,7 @@
 		email: string;
 		seat: Seat;
 		active: boolean;
+		mustChangePassword: boolean;
 	};
 
 	const PAGE_SIZE = 6;
@@ -22,35 +26,17 @@
 		{ value: 'admin', label: 'Admin' }
 	];
 
-	const seed: UserRow[] = [
-		['Victor Furtado', 'victor@bolso.com', 'admin'],
-		['Helena Vargas', 'helena@bolso.com', 'gm'],
-		['Caio Mendes', 'caio@bolso.com', 'player'],
-		['Lívia Duarte', 'livia@bolso.com', 'player'],
-		['Rafael Nunes', 'rafael@bolso.com', 'player'],
-		['Marina Costa', 'marina@bolso.com', 'gm'],
-		['Otávio Lima', 'otavio@bolso.com', 'player'],
-		['Beatriz Rocha', 'beatriz@bolso.com', 'player'],
-		['Igor Pacheco', 'igor@bolso.com', 'player'],
-		['Sofia Almeida', 'sofia@bolso.com', 'player'],
-		['Diego Martins', 'diego@bolso.com', 'gm'],
-		['Clara Ferreira', 'clara@bolso.com', 'player'],
-		['Bruno Teixeira', 'bruno@bolso.com', 'player'],
-		['Ana Bezerra', 'ana@bolso.com', 'player']
-	].map(([name, email, seat], index) => ({
-		id: `u-${index + 1}`,
-		name,
-		email,
-		seat: seat as Seat,
-		active: index !== 9
-	}));
+	let { data, form } = $props();
 
-	let rows = $state<UserRow[]>(seed);
+	let rows = $derived(data.users);
 	let query = $state('');
 	let page = $state(1);
 	let editing = $state<UserRow | null>(null);
 	let draft = $state({ name: '', email: '', seat: 'player' as Seat, active: true });
 	let pendingDelete = $state<UserRow | null>(null);
+	let inviteOpen = $state(false);
+	let inviting = $state(false);
+	let temporaryPassword = $state(false);
 	const filtered = $derived(
 		rows.filter((row) => {
 			const needle = query.trim().toLowerCase();
@@ -62,16 +48,22 @@
 	const visible = $derived(filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE));
 
 	$effect(() => {
+		if (form?.message) toast.error(form.message);
+		if (form?.invited) {
+			toast.success(
+				form.temporary
+					? `Conta criada para ${form.email} com a senha temporária.`
+					: `Convite enviado para ${form.email}.`
+			);
+		}
+	});
+
+	$effect(() => {
 		if (page > pageCount) page = pageCount;
 	});
 
 	function seatLabel(seat: Seat) {
 		return seats.find((item) => item.value === seat)?.label ?? seat;
-	}
-
-	function openCreate() {
-		editing = { id: '', name: '', email: '', seat: 'player', active: true };
-		draft = { name: '', email: '', seat: 'player', active: true };
 	}
 
 	function openEdit(row: UserRow) {
@@ -95,21 +87,11 @@
 			toast.error('Já existe uma conta com esse e-mail.');
 			return;
 		}
-		const created = !editing?.id;
-		if (created) {
-			rows = [
-				{ id: crypto.randomUUID(), name, email, seat: draft.seat, active: draft.active },
-				...rows
-			];
-		} else {
-			rows = rows.map((row) =>
-				row.id === editing?.id
-					? { ...row, name, email, seat: draft.seat, active: draft.active }
-					: row
-			);
-		}
+		rows = rows.map((row) =>
+			row.id === editing?.id ? { ...row, name, email, seat: draft.seat, active: draft.active } : row
+		);
 		closeForm();
-		toast.success(created ? 'Conta criada.' : 'Conta atualizada.');
+		toast.success('Conta atualizada nesta lista. A troca ainda não foi gravada.');
 	}
 
 	function removeUser() {
@@ -135,14 +117,124 @@
 				{filtered.length === 1 ? 'conta' : 'contas'} neste recorte.
 			</p>
 		</div>
-		<button
-			type="button"
-			onclick={openCreate}
-			class="inline-flex items-center justify-center gap-2 rounded-md bg-primary-700 px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary-600 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-		>
-			<Plus class="size-4" aria-hidden="true" />
-			Nova conta
-		</button>
+		<Dialog.Root bind:open={inviteOpen}>
+			<Dialog.Trigger
+				class="inline-flex items-center justify-center gap-2 rounded-md bg-primary-700 px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-colors outline-none hover:bg-primary-600 focus-visible:ring-2 focus-visible:ring-ring"
+			>
+				<Plus class="size-4" aria-hidden="true" />
+				Nova conta
+			</Dialog.Trigger>
+			<Dialog.Portal>
+				<Dialog.Overlay
+					class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm data-[state=closed]:animate-fade-out data-[state=open]:animate-fade-in motion-reduce:animate-none"
+				/>
+				<Dialog.Content
+					class="fixed top-1/2 left-1/2 z-50 w-[min(28rem,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-lg border border-border-strong bg-surface p-5 shadow-2xl shadow-black outline-none data-[state=closed]:animate-dialog-out data-[state=open]:animate-dialog-in motion-reduce:animate-none"
+				>
+					<Dialog.Title class="font-heading text-xl text-gold-100">Nova conta</Dialog.Title>
+					<Dialog.Description class="mt-1 text-sm text-muted-foreground">
+						{temporaryPassword
+							? 'A pessoa entra com a senha temporária e troca no primeiro acesso.'
+							: 'O convite sai de registro@rpgdebolso.site com um link para escolher a senha.'}
+					</Dialog.Description>
+					<form
+						method="POST"
+						action="?/invite"
+						class="mt-5 flex flex-col gap-4"
+						use:enhance={() => {
+							inviting = true;
+							return async ({ result, update }) => {
+								try {
+									await update();
+									if (result.type === 'success') inviteOpen = false;
+								} finally {
+									inviting = false;
+								}
+							};
+						}}
+					>
+						<fieldset disabled={inviting} class="m-0 flex min-w-0 flex-col gap-4 border-0 p-0">
+							<label class="flex flex-col gap-1.5 text-sm text-muted-foreground">
+								Nome
+								<input name="name" required maxlength="80" autocomplete="name" class={inputClass} />
+							</label>
+							<label class="flex flex-col gap-1.5 text-sm text-muted-foreground">
+								E-mail
+								<input
+									name="email"
+									type="email"
+									required
+									autocomplete="email"
+									value={form?.email ?? ''}
+									class={inputClass}
+								/>
+							</label>
+							<label class="flex flex-col gap-1.5 text-sm text-muted-foreground">
+								Assento
+								<select name="seat" class={inputClass}>
+									{#each seats as seat (seat.value)}
+										<option value={seat.value}>{seat.label}</option>
+									{/each}
+								</select>
+							</label>
+							<label class="flex cursor-pointer items-center gap-2.5 text-sm text-muted-foreground">
+								<input
+									type="checkbox"
+									name="temporary"
+									bind:checked={temporaryPassword}
+									class="size-4 rounded border-border-strong bg-input text-primary-600 focus:ring-gold-500/40 focus:ring-offset-surface"
+								/>
+								Usar senha temporária
+							</label>
+							<div class="flex justify-end">
+								<SubmitButton
+									pending={inviting}
+									class="rounded-md bg-primary-700 px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary-600 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+								>
+									{temporaryPassword ? 'Criar conta' : 'Enviar convite'}
+								</SubmitButton>
+							</div>
+						</fieldset>
+					</form>
+					<Dialog.Close
+						class="absolute top-4 right-4 rounded-md p-1 text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+					>
+						<X class="size-4" />
+						<span class="sr-only">Fechar</span>
+					</Dialog.Close>
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog.Root>
+		<noscript>
+			<form method="POST" action="?/invite" class="flex max-w-md flex-col gap-3">
+				<label class="flex flex-col gap-1.5 text-sm text-muted-foreground">
+					Nome
+					<input name="name" required maxlength="80" autocomplete="name" class={inputClass} />
+				</label>
+				<label class="flex flex-col gap-1.5 text-sm text-muted-foreground">
+					E-mail
+					<input name="email" type="email" required autocomplete="email" class={inputClass} />
+				</label>
+				<label class="flex flex-col gap-1.5 text-sm text-muted-foreground">
+					Assento
+					<select name="seat" class={inputClass}>
+						{#each seats as seat (seat.value)}
+							<option value={seat.value}>{seat.label}</option>
+						{/each}
+					</select>
+				</label>
+				<label class="flex items-center gap-2.5 text-sm text-muted-foreground">
+					<input type="checkbox" name="temporary" class="size-4" />
+					Usar senha temporária
+				</label>
+				<button
+					type="submit"
+					class="rounded-md bg-primary-700 px-4 py-2.5 text-sm font-medium text-primary-foreground"
+				>
+					Enviar convite
+				</button>
+			</form>
+		</noscript>
 	</header>
 
 	<div class="relative">
@@ -191,7 +283,9 @@
 									{seatLabel(row.seat)}
 								</span>
 							</td>
-							<td class="px-4 py-3 text-muted-foreground">{row.active ? 'Ativa' : 'Suspensa'}</td>
+							<td class="px-4 py-3 text-muted-foreground">
+								{row.mustChangePassword ? 'Senha temporária' : row.active ? 'Ativa' : 'Suspensa'}
+							</td>
 							<td class="px-4 py-3">
 								<div class="flex justify-end gap-1">
 									<button
@@ -268,9 +362,7 @@
 			}}
 		>
 			<div class="mb-4 flex items-start justify-between gap-3">
-				<h2 class="font-heading text-xl text-gold-100">
-					{editing.id ? 'Editar conta' : 'Nova conta'}
-				</h2>
+				<h2 class="font-heading text-xl text-gold-100">Editar conta</h2>
 				<button
 					type="button"
 					onclick={closeForm}

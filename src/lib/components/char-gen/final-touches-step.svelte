@@ -50,11 +50,6 @@
 		value.ancestry = { for: ancestry.id, alternate: build.ancestryPlan.alternate, free };
 	}
 
-	function setAlternate(alternate: boolean) {
-		if (!ancestry || !build.ancestryPlan) return;
-		value.ancestry = { for: ancestry.id, alternate, free: build.ancestryPlan.free };
-	}
-
 	function setBackgroundPick(index: number, pick: Ability | null) {
 		if (!background) return;
 		const picks = build.backgroundSlots.map((slot) => slot.pick);

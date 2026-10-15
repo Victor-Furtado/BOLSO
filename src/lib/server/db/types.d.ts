@@ -16,6 +16,10 @@ export interface PlayAccounts {
 	password_hash: string;
 	admin: Generated<number>;
 	disabled_at: string | null;
+	display_name: string;
+	need_action: ColumnType<string | null, string | null | undefined, string | null>;
+	invite_token_hash: ColumnType<string | null, string | null | undefined, string | null>;
+	invite_expires_at: ColumnType<string | null, string | null | undefined, string | null>;
 }
 
 export interface PlaySessions {

@@ -18,6 +18,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 	event.locals.role = role;
 
+	const loggingOut = event.url.pathname === '/login' && event.request.method === 'POST';
+	if (
+		account?.needAction === 'password_change' &&
+		event.route.id &&
+		!event.route.id.includes('/senha') &&
+		!loggingOut
+	) {
+		redirect(303, '/senha');
+	}
+
 	if (adminRoute(event.route.id)) {
 		if (!account) redirect(303, '/login');
 		if (!account.admin) error(403, 'Você não tem acesso a esta página.');

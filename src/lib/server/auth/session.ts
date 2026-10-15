@@ -11,11 +11,13 @@ export const REFRESH_COOKIE = 'bolso_refresh';
 const ACCESS_SECONDS = 15 * 60;
 const REFRESH_SECONDS = 30 * 24 * 60 * 60;
 const PASSWORD_MAX = 256;
+export const PASSWORD_MIN = 8;
 
 export type Account = {
 	id: string;
 	email: string;
 	admin: boolean;
+	needAction: string | null;
 };
 
 type SessionRow = {
@@ -28,10 +30,15 @@ type SessionRow = {
 	email: string;
 	admin: number;
 	disabled_at: string | null;
+	need_action: string | null;
 };
 
 export function passwordAcceptable(password: string): boolean {
 	return password.length > 0 && password.length <= PASSWORD_MAX;
+}
+
+export function newPasswordAcceptable(password: string): boolean {
+	return password.length >= PASSWORD_MIN && password.length <= PASSWORD_MAX;
 }
 
 function cookieBase(maxAge?: number) {
@@ -68,7 +75,8 @@ function sessionQuery() {
 			's.persistent',
 			'a.email',
 			'a.admin',
-			'a.disabled_at'
+			'a.disabled_at',
+			'a.need_action'
 		]);
 }
 
@@ -129,7 +137,12 @@ async function revokeFamily(familyId: string): Promise<void> {
 }
 
 function accountOf(row: SessionRow): Account {
-	return { id: row.account_id, email: row.email, admin: row.admin === 1 };
+	return {
+		id: row.account_id,
+		email: row.email,
+		admin: row.admin === 1,
+		needAction: row.need_action
+	};
 }
 
 export async function accountFromCookies(cookies: Cookies): Promise<Account | null> {
